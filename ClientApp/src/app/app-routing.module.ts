@@ -1,7 +1,10 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
+import { StudentComponent } from './student/student.component';
+import { TeacherComponent } from './teacher/teacher.component';
 import { SettingsContainerComponent } from './settings';
+
 
 const routes: Routes = [
   {
@@ -10,13 +13,19 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
+    path: 'student',
+    component: StudentComponent,
+    data: { title: 'anms.menu.student' }
+  },
+  {
+    path: 'teacher',
+    component: TeacherComponent,
+    data: { title: 'anms.menu.teacher' }
+  },
+  {
     path: 'settings',
     component: SettingsContainerComponent,
     data: { title: 'anms.menu.settings' }
-  },
-  {
-    path: 'examples',
-    loadChildren: 'app/examples/examples.module#ExamplesModule'
   },
   {
     path: '**',

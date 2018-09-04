@@ -6,6 +6,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -18,6 +19,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatTableModule } from '@angular/material/table';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
@@ -36,6 +38,7 @@ import { BigInputActionComponent } from './big-input/big-input-action.component'
     MatSelectModule,
     MatTabsModule,
     MatInputModule,
+    MatPaginatorModule,
     MatProgressSpinnerModule,
     MatChipsModule,
     MatCardModule,
@@ -45,6 +48,7 @@ import { BigInputActionComponent } from './big-input/big-input-action.component'
     MatMenuModule,
     MatIconModule,
     MatTooltipModule,
+    MatTableModule,
     MatSnackBarModule,
     MatSlideToggleModule
   ],
@@ -60,6 +64,7 @@ import { BigInputActionComponent } from './big-input/big-input-action.component'
     MatTabsModule,
     MatChipsModule,
     MatInputModule,
+    MatPaginatorModule,
     MatProgressSpinnerModule,
     MatCheckboxModule,
     MatCardModule,
@@ -69,6 +74,7 @@ import { BigInputActionComponent } from './big-input/big-input-action.component'
     MatToolbarModule,
     MatIconModule,
     MatTooltipModule,
+    MatTableModule,
     MatSnackBarModule,
     MatSlideToggleModule,
 
