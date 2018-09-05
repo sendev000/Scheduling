@@ -4,46 +4,97 @@
   margin-top: 20px;
 }
 
-.main-heading {
+.month {
+  padding: 20px 25px;
+  width: 100%;
+  background: #1abc9c;
+  text-align: center;
+}
+
+.month ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.month ul li {
+  color: white;
+  font-size: 20px;
   text-transform: uppercase;
-  margin: 0 0 20px 0;
+  letter-spacing: 3px;
+}
+.month button{
+  min-width: 40px;
+}
+.month .prev {
+  float: left;
+  padding-top: 10px;
 }
 
-mat-card {
-  margin: 0 0 20px 0;
+.month .next {
+  float: right;
+  padding-top: 10px;
+}
 
-  mat-card-title {
-    position: relative;
+.weekdays {
+  margin: 0;
+  padding: 10px 0;
+  background-color: #ddd;
+}
 
-    code {
-      position: absolute;
-      top: 11px;
-      right: 0;
-      float: right;
-      font-size: 10px;
-    }
-  }
-  mat-card-subtitle {
-    min-height: 60px;
-  }
+.weekdays li {
+  display: inline-block;
+  width: 13.6%;
+  color: #666;
+  text-align: center;
+}
 
-  @media (max-width: map-get($grid-breakpoints, sm)) {
-    mat-card-subtitle {
-      min-height: auto;
-    }
-  }
+.days {
+  padding: 10px 0;
+  background: #eee;
+  margin: 0;
+}
 
-  a {
-    mat-icon {
-      position: relative;
-      top: 2px;
-      font-size: 16px;
-    }
-  }
+.days li {
+  list-style-type: none;
+  display: inline-block;
+  width: 13.6%;
+  text-align: center;
+  margin-bottom: 5px;
+  font-size: 12px;
+  color: #777;
+}
 
-  a[mat-icon-button] {
-    position: relative;
-    top: -4px;
-    left: 5px;
+.days li .active {
+  padding: 5px;
+  background: #1abc9c;
+  color: white !important
+}
+
+table {
+  width: 100%;
+}
+
+/* Add media queries for smaller screens */
+@media screen and (max-width:720px) {
+  .weekdays li, .days li {
+    width: 13.1%;
   }
 }
+
+@media screen and (max-width: 420px) {
+  .weekdays li, .days li {
+    width: 12.5%;
+  }
+
+  .days li .active {
+    padding: 2px;
+  }
+}
+
+@media screen and (max-width: 290px) {
+  .weekdays li, .days li {
+    width: 12.2%;
+  }
+}
+

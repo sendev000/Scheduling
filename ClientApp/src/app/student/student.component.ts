@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatTableDataSource } from '@angular/material';
+import { Angular5Csv } from 'angular5-csv/Angular5-csv';
+
 
 import { environment as env } from '@env/environment';
 import { ROUTE_ANIMATIONS_ELEMENTS } from '@app/core';
@@ -12,45 +14,110 @@ import { ROUTE_ANIMATIONS_ELEMENTS } from '@app/core';
 export class StudentComponent implements OnInit {
   routeAnimationsElements = ROUTE_ANIMATIONS_ELEMENTS;
   versions = env.versions;
-  displayedColumns: string[] = ['school_code', 'school_year', 'student', 'course_code'];
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+
+  elementData: PeriodicElement[] = [
+    { school_code: 'WHIS', school_year: '20172018B2', student: '1', course_code: 'MCT4CHD2', course_section: '02', grade: 12, semester: 2, term: 1, block: 'A', room_no: '', class_code: 'HBISP-02' },
+    { school_code: 'WHIS', school_year: '20172018B2', student: '2', course_code: 'MCT4CHD2', course_section: '02', grade: 12, semester: 2, term: 1, block: 'A', room_no: '', class_code: 'HBISP-02' },
+    { school_code: 'WHIS', school_year: '20172018B2', student: '3', course_code: 'MCT4CHD2', course_section: '02', grade: 12, semester: 2, term: 1, block: 'A', room_no: '', class_code: 'HBISP-02' },
+    { school_code: 'WHIS', school_year: '20172018B2', student: '4', course_code: 'MCT4CHD2', course_section: '02', grade: 12, semester: 2, term: 1, block: 'A', room_no: '', class_code: 'HBISP-02' },
+    { school_code: 'WHIS', school_year: '20172018B2', student: '5', course_code: 'MCT4CHD2', course_section: '02', grade: 12, semester: 2, term: 1, block: 'A', room_no: '', class_code: 'HBISP-02' },
+    { school_code: 'WHIS', school_year: '20172018B2', student: '6', course_code: 'MCT4CHD2', course_section: '02', grade: 12, semester: 2, term: 1, block: 'A', room_no: '', class_code: 'HBISP-02' },
+    { school_code: 'WHIS', school_year: '20172018B2', student: '7', course_code: 'MCT4CHD2', course_section: '02', grade: 12, semester: 2, term: 1, block: 'A', room_no: '', class_code: 'HBISP-02' },
+    { school_code: 'WHIS', school_year: '20172018B2', student: '8', course_code: 'MCT4CHD2', course_section: '02', grade: 12, semester: 2, term: 1, block: 'A', room_no: '', class_code: 'HBISP-02' },
+    { school_code: 'WHIS', school_year: '20172018B2', student: '9', course_code: 'MCT4CHD2', course_section: '02', grade: 12, semester: 2, term: 1, block: 'A', room_no: '', class_code: 'HBISP-02' },
+    { school_code: 'WHIS', school_year: '20172018B2', student: '10', course_code: 'MCT4CHD2', course_section: '02', grade: 12, semester: 2, term: 1, block: 'A', room_no: '', class_code: 'HBISP-02' },
+    { school_code: 'WHIS', school_year: '20172018B2', student: '11', course_code: 'MCT4CHD2', course_section: '02', grade: 12, semester: 2, term: 1, block: 'A', room_no: '', class_code: 'HBISP-02' },
+    { school_code: 'WHIS', school_year: '20172018B2', student: '12', course_code: 'MCT4CHD2', course_section: '02', grade: 12, semester: 2, term: 1, block: 'A', room_no: '', class_code: 'HBISP-02' },
+    { school_code: 'WHIS', school_year: '20172018B2', student: '13', course_code: 'MCT4CHD2', course_section: '02', grade: 12, semester: 2, term: 1, block: 'A', room_no: '', class_code: 'HBISP-02' },
+  ];
+  displayedColumns: string[] = ['school_code', 'school_year', 'student', 'course_code', 'course_section', 'grade', 'semester', 'term', 'block', 'room_no', 'class_code'];
+  dataSource: any;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   ngOnInit() {
+    this.dataSource = new MatTableDataSource<PeriodicElement>(this.elementData);
     this.dataSource.paginator = this.paginator;
   }
 
   openLink(link: string) {
     window.open(link, '_blank');
   }
+
+  exportData() {
+    var options = {
+      fieldSeparator: ',',
+      quoteStrings: '"',
+      decimalseparator: '.',
+      showLabels: true,
+      useBom: true,
+      noDownload: false,
+      headers: this.displayedColumns
+    };
+    new Angular5Csv(this.elementData, 'Student Data', options);
+  }
+  importData() {
+    setTimeout(function () {
+      document.getElementById("importFile").click();
+    })
+  }
+  handleFileSelect(evt) {
+    var files = evt.target.files; // FileList object
+    var file = files[0];
+    var reader = new FileReader();
+    var __this = this;
+    reader.readAsText(file);
+    reader.onload = function (event) {
+      var csv = event.target.result; // Content of CSV file
+      __this.extractData(csv); //Here you can call the above function.
+    }
+  }
+  extractData(data) { // Input csv data to the function
+
+    let csvData = data;
+    let allTextLines = csvData.split(/\r\n|\n/);
+    let headers = allTextLines[0].split(',');
+    let head = [];
+
+    this.elementData = [];
+    for (let i = 0; i < allTextLines.length; i++) {
+      // split content based on comma
+      let data = allTextLines[i].split(',');
+      if (data.length == headers.length) {
+        if (i == 0) {
+          for (let j = 0; j < headers.length; j++) {
+              head.push(data[j]);
+          }
+        }
+        else {
+          let tobj = {};
+          for (let j = 0; j < headers.length; j++) {
+            if (head[j] != "")
+              tobj[head[j]] = data[j];
+          }
+          this.elementData.push(tobj);
+        }
+      }
+    }
+    this.displayedColumns = [];
+    for (let i = 0; i < head.length; i++) {
+      if (head[i] != "")
+        this.displayedColumns.push(head[i]);
+    }
+    this.dataSource = new MatTableDataSource<PeriodicElement>(this.elementData);
+    this.dataSource.paginator = this.paginator;
+  }
 }
 
 export interface PeriodicElement {
-  school_code: number;
-  school_year: string;
-  student: number;
-  course_code: string;
+  school_code: string,
+  school_year: string,
+  student: string,
+  course_code: string,
+  course_section: string,
+  grade: number,
+  semester: number,
+  term: number,
+  block: string,
+  room_no: string,
+  class_code: string
 }
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  { school_code: 1, school_year: 'Hydrogen', student: 1.0079, course_code: 'H' },
-  { school_code: 2, school_year: 'Helium', student: 4.0026, course_code: 'He' },
-  { school_code: 3, school_year: 'Lithium', student: 6.941, course_code: 'Li' },
-  { school_code: 4, school_year: 'Beryllium', student: 9.0122, course_code: 'Be' },
-  { school_code: 5, school_year: 'Boron', student: 10.811, course_code: 'B' },
-  { school_code: 6, school_year: 'Carbon', student: 12.0107, course_code: 'C' },
-  { school_code: 7, school_year: 'Nitrogen', student: 14.0067, course_code: 'N' },
-  { school_code: 8, school_year: 'Oxygen', student: 15.9994, course_code: 'O' },
-  { school_code: 9, school_year: 'Fluorine', student: 18.9984, course_code: 'F' },
-  { school_code: 10, school_year: 'Neon', student: 20.1797, course_code: 'Ne' },
-  { school_code: 11, school_year: 'Sodium', student: 22.9897, course_code: 'Na' },
-  { school_code: 12, school_year: 'Magnesium', student: 24.305, course_code: 'Mg' },
-  { school_code: 13, school_year: 'Aluminum', student: 26.9815, course_code: 'Al' },
-  { school_code: 14, school_year: 'Silicon', student: 28.0855, course_code: 'Si' },
-  { school_code: 15, school_year: 'Phosphorus', student: 30.9738, course_code: 'P' },
-  { school_code: 16, school_year: 'Sulfur', student: 32.065, course_code: 'S' },
-  { school_code: 17, school_year: 'Chlorine', student: 35.453, course_code: 'Cl' },
-  { school_code: 18, school_year: 'Argon', student: 39.948, course_code: 'Ar' },
-  { school_code: 19, school_year: 'Potassium', student: 39.0983, course_code: 'K' },
-  { school_code: 20, school_year: 'Calcium', student: 40.078, course_code: 'Ca' },
-];

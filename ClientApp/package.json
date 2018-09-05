@@ -53,6 +53,7 @@
     "@ngrx/store-devtools": "^6.1.0",
     "@ngx-translate/core": "^10.0.2",
     "@ngx-translate/http-loader": "^3.0.1",
+    "angular5-csv": "^0.2.10",
     "bootstrap": "^4.1.1",
     "browser-detect": "^0.2.27",
     "core-js": "^2.5.4",
