@@ -75,7 +75,7 @@ export class TeacherComponent implements OnInit {
 
   monthTran(ind) {
     this.month += ind;
-    if (this.month === -1) {
+    if (this.month === 0) {
       this.year--;
       this.month = 12;
     }
