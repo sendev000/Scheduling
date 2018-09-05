@@ -38,8 +38,15 @@
 
 table {
   width: 100%;
+  th, td{
+    width: 12.5%;
+  }
 }
 
+
+.day_buttons {
+  background: #EEEEEE;
+}
 .period, .class_name {
   width: 100%;
 }
