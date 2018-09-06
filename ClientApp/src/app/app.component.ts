@@ -47,6 +47,10 @@ export class AppComponent implements OnInit, OnDestroy {
   navigation = [
     { link: 'student', label: 'anms.menu.student' },
     { link: 'teacher', label: 'anms.menu.teacher' },
+    { link: 'class', label: 'anms.menu.class' },
+    { link: 'semester', label: 'anms.menu.semester' },
+    { link: 'lesson', label: 'anms.menu.lesson' },
+    { link: 'schedule', label: 'anms.menu.schedule' },
     { link: 'about', label: 'anms.menu.about' },
   ];
   navigationSideMenu = [
