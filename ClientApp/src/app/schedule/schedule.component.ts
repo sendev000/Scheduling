@@ -104,7 +104,7 @@ export class ScheduleComponent implements OnInit {
           };
           for (let j = 0; j < headers.length; j++) {
             if (head[j] != "")
-              tobj[head[j]] = data[j];
+              tobj[head[j]] = data[j].replace(/['"]+/g, '');
           }
           this.elementData.push(tobj);
         }
