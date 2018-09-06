@@ -3,8 +3,11 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { StudentComponent } from './student/student.component';
 import { TeacherComponent } from './teacher/teacher.component';
+import { ClassComponent } from './class/class.component';
+import { LessonComponent } from './lesson/lesson.component';
+import { SemesterComponent } from './semester/semester.component';
+import { ScheduleComponent } from './schedule/schedule.component';
 import { SettingsContainerComponent } from './settings';
-
 
 const routes: Routes = [
   {
@@ -21,6 +24,26 @@ const routes: Routes = [
     path: 'teacher',
     component: TeacherComponent,
     data: { title: 'anms.menu.teacher' }
+  },
+  {
+    path: 'class',
+    component: ClassComponent,
+    data: { title: 'anms.menu.class' }
+  },
+  {
+    path: 'lesson',
+    component: LessonComponent,
+    data: { title: 'anms.menu.lesson' }
+  },
+  {
+    path: 'semester',
+    component: SemesterComponent,
+    data: { title: 'anms.menu.semester' }
+  },
+  {
+    path: 'schedule',
+    component: ScheduleComponent,
+    data: { title: 'anms.menu.schedule' }
   },
   {
     path: 'settings',

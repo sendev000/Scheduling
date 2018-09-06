@@ -5,8 +5,12 @@ import { NgModule } from '@angular/core';
 import { SharedModule } from '@app/shared';
 import { CoreModule } from '@app/core';
 
-import { TeacherModule } from './teacher/teacher.module';
 import { StudentModule } from './student/student.module';
+import { TeacherModule } from './teacher/teacher.module';
+import { ClassModule } from './class/class.module';
+import { LessonModule } from './lesson/lesson.module';
+import { SemesterModule } from './semester/semester.module';
+import { ScheduleModule } from './schedule/schedule.module';
 import { SettingsModule } from './settings';
 import { StaticModule } from './static';
 
@@ -25,8 +29,12 @@ import { AppComponent } from './app.component';
 
     // features
     StaticModule,
-    TeacherModule,
     StudentModule,
+    TeacherModule,
+    ClassModule,
+    LessonModule,
+    SemesterModule,
+    ScheduleModule,
     SettingsModule,
 
     // app

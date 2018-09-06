@@ -12,14 +12,17 @@ import { ROUTE_ANIMATIONS_ELEMENTS } from '@app/core';
 export class TeacherComponent implements OnInit {
   routeAnimationsElements = ROUTE_ANIMATIONS_ELEMENTS;
   versions = env.versions;
-  const monthNames = ["January", "February", "March", "April", "May", "June",
+  monthNames = ["January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"
   ];
   weekStrings = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-  year, month, day: number,
-  week: number,
+  year: number;
+  month: number;
+  day: number;
+  week: number;
   monthString: string;
-  monthStart, monthEnd: number;
+  monthStart: number;
+  monthEnd: number;
   monthStartDay: number;
   monthDays: any;
 
@@ -52,8 +55,17 @@ export class TeacherComponent implements OnInit {
 
     this.elementData = [];
     for (let i = 0; i < 6; i++) {
-      let arr = {};
-      arr["week"] = weekNum + i;
+      let arr = {
+        week: '',
+        week1: '',
+        week2: '',
+        week3: '',
+        week4: '',
+        week5: '',
+        week6: '',
+        week7: ''
+      };
+      arr["week"] = (weekNum + i).toString();
       for (let j = 0; j < 7; j++) {
         let val = i * 7 + j - this.monthStartDay;
         let key = "week" + (j + 1).toString();
@@ -89,7 +101,7 @@ export class TeacherComponent implements OnInit {
   getWeekNumber(d) {
     var onejan = new Date(d.getFullYear(), 0, 1);
     var millisecsInDay = 86400000;
-    return Math.ceil((((d - onejan) / millisecsInDay) + onejan.getDay() + 1) / 7);
+    return Math.ceil((((d.getTime() - onejan.getTime()) / millisecsInDay) + onejan.getDay() + 1) / 7);
   };
 }
 

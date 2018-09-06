@@ -4,5 +4,9 @@
   "anms.menu.about": "About",
   "anms.menu.student": "Student",
   "anms.menu.teacher": "Teacher",
+  "anms.menu.class": "Class",
+  "anms.menu.lesson": "Lesson",
+  "anms.menu.semester": "Semester",
+  "anms.menu.schedule": "Schedule",
   "anms.menu.settings": "Settings"
 }
