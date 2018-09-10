@@ -97,7 +97,10 @@ export class TeacherComponent implements OnInit {
     }
     this.calcValues();
   }
-
+  yearTran(ind) {
+    this.year += ind;
+    this.calcValues();
+  }
   getWeekNumber(d) {
     var onejan = new Date(d.getFullYear(), 0, 1);
     var millisecsInDay = 86400000;

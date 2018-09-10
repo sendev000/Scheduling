@@ -1,8 +1,23 @@
 <div class="container">
+  <div class="rows button_rows">
+    <div class="col-md-2 offset-md-10">
+      <button class="dropDownMenu" mat-button [matMenuTriggerFor]="menu">Assignments</button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item>Assign to Teacher</button>
+        <button mat-menu-item>Assign to Date</button>
+      </mat-menu>
+    </div>
+  </div>
   <div class="month">
     <ul>
+      <li class="prev_year">
+        <button mat-raised-button (click)="yearTran(-1)">&#10094;&#10094;</button>
+      </li>
       <li class="prev">
         <button mat-raised-button (click)="monthTran(-1)">&#10094;</button>
+      </li>
+      <li class="next_year">
+        <button mat-raised-button (click)="yearTran(1)">&#10095;&#10095;</button>
       </li>
       <li class="next">
         <button mat-raised-button (click)="monthTran(1)">&#10095;</button>

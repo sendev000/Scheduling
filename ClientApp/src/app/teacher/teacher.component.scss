@@ -4,6 +4,14 @@
   margin-top: 20px;
 }
 
+.button_rows{
+  padding: 0px;
+  margin-bottom: 15px;
+  & > div {
+     padding: 0px;
+  }
+}
+
 .month {
   padding: 20px 25px;
   width: 100%;
@@ -26,14 +34,16 @@
 .month button{
   min-width: 40px;
 }
-.month .prev {
+.month .prev, .month .prev_year {
   float: left;
   padding-top: 10px;
+  margin-right: 10px;
 }
 
-.month .next {
+.month .next, .month .next_year {
   float: right;
   padding-top: 10px;
+  margin-left: 10px;
 }
 
 table {
@@ -54,10 +64,31 @@ table {
   font-size: 16px;
   font-weight: 600;
 }
+
 /* Add media queries for smaller screens */
 @media screen and (max-width:720px) {
   .weekdays li, .days li {
     width: 13.1%;
+  }
+
+  .mat-cell, .mat-footer-cell.period, .class_name {
+    font-size: 11px;
+  }
+}
+
+@media screen and (min-width: 576px) {
+  .container {
+    max-width: 100%;
+  }
+  .mat-button {
+    min-width: auto;
+    width: 100%;
+  }
+  td.mat-cell:first-child, th.mat-header-cell:first-child {
+    padding-left: 0px;
+  }
+  td.mat-cell:last-child, th.mat-header-cell:last-child {
+    padding-right: 0px;
   }
 }
 
