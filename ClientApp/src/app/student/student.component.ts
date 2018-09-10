@@ -2,9 +2,10 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { MatPaginator, MatTableDataSource } from '@angular/material';
 import { Angular5Csv } from 'angular5-csv/Angular5-csv';
-
 import { environment as env } from '@env/environment';
 import { ROUTE_ANIMATIONS_ELEMENTS } from '@app/core';
+
+import { AppSettings } from '../global/global';
 
 @Component({
   selector: 'anms-student',
@@ -29,9 +30,6 @@ export class StudentComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   ngOnInit() {
-    this.dataSource = new MatTableDataSource<StudentElement>(this.studentArray);
-    this.dataSource.paginator = this.paginator;
-
     this.init();
   }
 
@@ -40,12 +38,14 @@ export class StudentComponent implements OnInit {
   }
 
   init() {
-    this.numberOfStudent = 0;
-    this.numberOfMale = 0;
-    this.numberOfFemale = 0;
-    this.studentArray = [];
-
+    this.numberOfStudent = AppSettings.getMaleStudents() + AppSettings.getFemaleStudents();
+    this.numberOfMale = AppSettings.getMaleStudents();
+    this.numberOfFemale = AppSettings.getFemaleStudents();
+    this.studentArray = AppSettings.getStudentArray();
     this.editable = false;
+
+    this.dataSource = new MatTableDataSource<StudentElement>(this.studentArray);
+    this.dataSource.paginator = this.paginator;
   }
 
   editNumber() {
@@ -55,10 +55,12 @@ export class StudentComponent implements OnInit {
     this.editable = true;
   }
   updateNumber() {
-    this.numberOfMale = parseInt(Number(this.tempMale));
-    this.numberOfFemale = parseInt(Number(this.tempFemale));
+    this.numberOfMale = Math.floor(this.tempMale);
+    this.numberOfFemale = Math.floor(this.tempFemale);
     this.numberOfStudent = this.numberOfMale + this.numberOfFemale;
     this.editable = false;
+    AppSettings.setMaleStudents(this.numberOfMale);
+    AppSettings.setFemaleStudents(this.numberOfFemale);
   }
   exportData() {
     var options = {
@@ -132,6 +134,10 @@ export class StudentComponent implements OnInit {
     this.numberOfStudent = male + female;
     this.dataSource = new MatTableDataSource<StudentElement>(this.studentArray);
     this.dataSource.paginator = this.paginator;
+
+    AppSettings.setMaleStudents(this.numberOfMale);
+    AppSettings.setFemaleStudents(this.numberOfFemale);
+    AppSettings.setStudentArray(this.studentArray);
   }
   generateStudent() {
     this.studentArray = [];
@@ -148,9 +154,11 @@ export class StudentComponent implements OnInit {
     this.studentArray.sort(this.compareSecondColumn);
     this.dataSource = new MatTableDataSource<StudentElement>(this.studentArray);
     this.dataSource.paginator = this.paginator;
+
+    AppSettings.setStudentArray(this.studentArray);
   }
   generateName() {
-    let id = parseInt(Math.random() * studentNames.length);
+    let id = Math.floor(Math.random() * studentNames.length);
     return studentNames[id];
   }
   generateStudentId() {
