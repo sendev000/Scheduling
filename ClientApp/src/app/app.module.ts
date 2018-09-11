@@ -9,13 +9,11 @@ import { SchoolModule } from './school/school.module';
 import { SemesterModule } from './semester/semester.module';
 import { PeriodModule } from './period/period.module';
 import { RoomModule } from './room/room.module';
-
-
-
-import { StudentModule } from './student/student.module';
 import { TeacherModule } from './teacher/teacher.module';
+import { CourseModule } from './course/course.module';
+import { SectionModule } from './section/section.module';
 import { ClassModule } from './class/class.module';
-import { LessonModule } from './lesson/lesson.module';
+import { StudentModule } from './student/student.module';
 import { ScheduleModule } from './schedule/schedule.module';
 import { SettingsModule } from './settings';
 import { StaticModule } from './static';
@@ -33,16 +31,22 @@ import { AppComponent } from './app.component';
     CoreModule,
     SharedModule,
 
-    // features
+    // default
     StaticModule,
-    StudentModule,
-    TeacherModule,
-    ClassModule,
-    LessonModule,
-    SemesterModule,
-    ScheduleModule,
     SettingsModule,
 
+    // features
+    SchoolModule,
+    SemesterModule,
+    PeriodModule,
+    RoomModule,
+    TeacherModule,
+    CourseModule,
+    SectionModule,
+    ClassModule,
+    StudentModule,
+    ScheduleModule,
+    
     // app
     AppRoutingModule
   ],

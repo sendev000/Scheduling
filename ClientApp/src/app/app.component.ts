@@ -45,11 +45,15 @@ export class AppComponent implements OnInit, OnDestroy {
   logo = require('../assets/logo.png');
   languages = ['en', 'de', 'sk', 'fr', 'es'];
   navigation = [
-    { link: 'student', label: 'anms.menu.student' },
-    { link: 'teacher', label: 'anms.menu.teacher' },
-    { link: 'class', label: 'anms.menu.class' },
+    { link: 'school', label: 'anms.menu.school' },
     { link: 'semester', label: 'anms.menu.semester' },
-    { link: 'lesson', label: 'anms.menu.lesson' },
+    { link: 'period', label: 'anms.menu.period' },
+    { link: 'room', label: 'anms.menu.room' },
+    { link: 'teacher', label: 'anms.menu.teacher' },
+    { link: 'course', label: 'anms.menu.course' },
+    { link: 'section', label: 'anms.menu.section' },
+    { link: 'class', label: 'anms.menu.class' },
+    { link: 'student', label: 'anms.menu.student' },
     { link: 'schedule', label: 'anms.menu.schedule' },
     { link: 'about', label: 'anms.menu.about' },
   ];

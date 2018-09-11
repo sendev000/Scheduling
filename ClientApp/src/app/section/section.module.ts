@@ -4,12 +4,12 @@ import { EffectsModule } from '@ngrx/effects';
 
 import { SharedModule } from '@app/shared';
 
-import { LessonComponent } from './lesson.component';
+import { SectionComponent } from './section.component';
 
 @NgModule({
   imports: [
   	SharedModule
   ],
-  declarations: [LessonComponent]
+  declarations: [SectionComponent]
 })
-export class LessonModule {}
+export class SectionModule {}

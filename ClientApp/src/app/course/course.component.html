@@ -1,28 +1,28 @@
 <div class="container">
   <div class="row">
     <h1 class="main-heading">
-      Student Page
+      Course Page
     </h1>
   </div>
   <div class="row">
     <div class="col-md-3">
       <label>
-        <ng-container>Total Student: {{numberOfStudent}}</ng-container>
+        <ng-container>Total Course: {{numberOfCourse}}</ng-container>
       </label>
     </div>
     <div class="col-md-3">
       <label>
-        <ng-container *ngIf="!editable">Male Student: {{numberOfMale}}</ng-container>
+        <ng-container *ngIf="!editable">Male Course: {{numberOfMale}}</ng-container>
         <mat-form-field *ngIf="editable">
-          <input matInput placeholder="Total Student" [(ngModel)]="tempMale" />
+          <input matInput placeholder="Total Course" [(ngModel)]="tempMale" />
         </mat-form-field>
       </label>
     </div>
     <div class="col-md-3">
       <label>
-        <ng-container *ngIf="!editable">Female Student: {{numberOfFemale}}</ng-container>
+        <ng-container *ngIf="!editable">Female Course: {{numberOfFemale}}</ng-container>
         <mat-form-field *ngIf="editable">
-          <input matInput placeholder="Total Student" [(ngModel)]="tempFemale" />
+          <input matInput placeholder="Total Course" [(ngModel)]="tempFemale" />
         </mat-form-field>
       </label>
     </div>
@@ -39,35 +39,35 @@
       <input type="file" id="importFile" (change)="handleFileSelect($event)" />
     </div>
     <div class="col-md-3">
-      <button mat-raised-button [disabled]="(numberOfStudent === 0)" (click)="generateStudent()">Random Generate</button>
+      <button mat-raised-button [disabled]="(numberOfCourse === 0)" (click)="generateCourse()">Random Generate</button>
     </div>
     <div class="col-md-3">
-      <button mat-raised-button [disabled]="(numberOfStudent === 0)" (click)="exportData()">Export</button>
+      <button mat-raised-button [disabled]="(numberOfCourse === 0)" (click)="exportData()">Export</button>
     </div>
   </div>
   <hr />
   <br />
   <div class="row">
     <h1 class="main-heading">
-      Student Data
+      Course Data
     </h1>
     <table mat-table [dataSource]="dataSource">
       <!-- Position Column -->
-      <ng-container matColumnDef="student_id">
+      <ng-container matColumnDef="course_id">
         <th mat-header-cell *matHeaderCellDef> ID </th>
-        <td mat-cell *matCellDef="let element"> {{element.student_id}} </td>
+        <td mat-cell *matCellDef="let element"> {{element.course_id}} </td>
       </ng-container>
 
       <!-- Name Column -->
-      <ng-container matColumnDef="student_name">
+      <ng-container matColumnDef="course_name">
         <th mat-header-cell *matHeaderCellDef> Name </th>
-        <td mat-cell *matCellDef="let element"> {{element.student_name}} </td>
+        <td mat-cell *matCellDef="let element"> {{element.course_name}} </td>
       </ng-container>
 
       <!-- Weight Column -->
-      <ng-container matColumnDef="student_gender">
+      <ng-container matColumnDef="course_gender">
         <th mat-header-cell *matHeaderCellDef> Gender </th>
-        <td mat-cell *matCellDef="let element"> {{element.student_gender}} </td>
+        <td mat-cell *matCellDef="let element"> {{element.course_gender}} </td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

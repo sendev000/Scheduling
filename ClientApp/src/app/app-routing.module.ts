@@ -1,11 +1,15 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { StudentComponent } from './student/student.component';
-import { TeacherComponent } from './teacher/teacher.component';
-import { ClassComponent } from './class/class.component';
-import { LessonComponent } from './lesson/lesson.component';
+import { SchoolComponent } from './school/school.component';
 import { SemesterComponent } from './semester/semester.component';
+import { PeriodComponent } from './period/period.component';
+import { RoomComponent } from './room/room.component';
+import { TeacherComponent } from './teacher/teacher.component';
+import { CourseComponent } from './course/course.component';
+import { SectionComponent } from './section/section.component';
+import { ClassComponent } from './class/class.component';
+import { StudentComponent } from './student/student.component';
 import { ScheduleComponent } from './schedule/schedule.component';
 import { SettingsContainerComponent } from './settings';
 
@@ -16,9 +20,24 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'student',
-    component: StudentComponent,
-    data: { title: 'anms.menu.student' }
+    path: 'school',
+    component: SchoolComponent,
+    data: { title: 'anms.menu.school' }
+  },
+  {
+    path: 'semester',
+    component: SemesterComponent,
+    data: { title: 'anms.menu.semester' }
+  },
+  {
+    path: 'period',
+    component: PeriodComponent,
+    data: { title: 'anms.menu.period' }
+  },
+  {
+    path: 'room',
+    component: RoomComponent,
+    data: { title: 'anms.menu.room' }
   },
   {
     path: 'teacher',
@@ -26,19 +45,24 @@ const routes: Routes = [
     data: { title: 'anms.menu.teacher' }
   },
   {
+    path: 'course',
+    component: CourseComponent,
+    data: { title: 'anms.menu.course' }
+  },
+  {
+    path: 'section',
+    component: SectionComponent,
+    data: { title: 'anms.menu.section' }
+  },
+  {
     path: 'class',
     component: ClassComponent,
     data: { title: 'anms.menu.class' }
   },
   {
-    path: 'lesson',
-    component: LessonComponent,
-    data: { title: 'anms.menu.lesson' }
-  },
-  {
-    path: 'semester',
-    component: SemesterComponent,
-    data: { title: 'anms.menu.semester' }
+    path: 'student',
+    component: StudentComponent,
+    data: { title: 'anms.menu.student' }
   },
   {
     path: 'schedule',
