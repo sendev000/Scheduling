@@ -16,7 +16,7 @@ import { SettingsContainerComponent } from './settings';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'student',
+    redirectTo: 'school',
     pathMatch: 'full'
   },
   {
@@ -76,7 +76,7 @@ const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: 'student'
+    redirectTo: 'school'
   }
 ];
 
