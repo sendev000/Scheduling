@@ -1,0 +1,78 @@
+<div class="container">
+  <div class="row">
+    <h1 class="main-heading">
+      Period Page
+    </h1>
+  </div>
+  <div class="row">
+    <div class="col-md-3">
+      <label>
+        <ng-container>Total Period: {{numberOfPeriod}}</ng-container>
+      </label>
+    </div>
+    <div class="col-md-3">
+      <label>
+        <ng-container *ngIf="!editable">Male Period: {{numberOfMale}}</ng-container>
+        <mat-form-field *ngIf="editable">
+          <input matInput placeholder="Total Period" [(ngModel)]="tempMale" />
+        </mat-form-field>
+      </label>
+    </div>
+    <div class="col-md-3">
+      <label>
+        <ng-container *ngIf="!editable">Female Period: {{numberOfFemale}}</ng-container>
+        <mat-form-field *ngIf="editable">
+          <input matInput placeholder="Total Period" [(ngModel)]="tempFemale" />
+        </mat-form-field>
+      </label>
+    </div>
+    <div class="col-md-3">
+      <button mat-raised-button *ngIf="!editable" (click)="editNumber()">Edit</button>
+      <button mat-raised-button *ngIf="editable" (click)="updateNumber()">Update</button>
+    </div>
+  </div>
+  <br />
+  <hr />
+  <div class="row">
+    <div class="col-md-3">
+      <button mat-raised-button (click)="importData()">Import</button>
+      <input type="file" id="importFile" (change)="handleFileSelect($event)" />
+    </div>
+    <div class="col-md-3">
+      <button mat-raised-button [disabled]="(numberOfPeriod === 0)" (click)="generatePeriod()">Random Generate</button>
+    </div>
+    <div class="col-md-3">
+      <button mat-raised-button [disabled]="(numberOfPeriod === 0)" (click)="exportData()">Export</button>
+    </div>
+  </div>
+  <hr />
+  <br />
+  <div class="row">
+    <h1 class="main-heading">
+      Period Data
+    </h1>
+    <table mat-table [dataSource]="dataSource">
+      <!-- Position Column -->
+      <ng-container matColumnDef="period_id">
+        <th mat-header-cell *matHeaderCellDef> ID </th>
+        <td mat-cell *matCellDef="let element"> {{element.period_id}} </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="period_name">
+        <th mat-header-cell *matHeaderCellDef> Name </th>
+        <td mat-cell *matCellDef="let element"> {{element.period_name}} </td>
+      </ng-container>
+
+      <!-- Weight Column -->
+      <ng-container matColumnDef="period_gender">
+        <th mat-header-cell *matHeaderCellDef> Gender </th>
+        <td mat-cell *matCellDef="let element"> {{element.period_gender}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="10" [length]="100" showFirstLastButtons></mat-paginator>
+  </div>
+</div>
