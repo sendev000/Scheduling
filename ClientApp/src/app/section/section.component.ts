@@ -17,7 +17,7 @@ export class SectionComponent implements OnInit {
   versions = env.versions;
 
   ngOnInit() {
-    this.init();
+
   }
 
   openLink(link: string) {
