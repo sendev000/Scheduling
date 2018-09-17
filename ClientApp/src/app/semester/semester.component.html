@@ -4,4 +4,50 @@
       Semester Page
     </h1>
   </div>
+  <div class="row">
+    <div class="col-sm-4">
+      <mat-form-field>
+        <mat-select placeholder="Select Teacher" [(ngModel)]="selectTeacher" name="teacher" (selectionChange)="changeTeacher($event)">
+          <mat-option value="-1">All</mat-option>
+          <mat-option *ngFor="let tc of teacherArray" [value]="tc">
+            {{tc}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="col-sm-4">
+      <mat-form-field>
+        <mat-select placeholder="Select Semester" [(ngModel)]="selectSemester" name="semester" (selectionChange)="changeSemester($event)">
+          <mat-option value="-1">All</mat-option>
+          <mat-option *ngFor="let ss of semesterArray" [value]="ss">
+            {{ss}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="col-sm-4">
+      <mat-form-field>
+        <mat-select placeholder="Select Room" [(ngModel)]="selectRoom" name="room" (selectionChange)="changeRoom($event)">
+          <mat-option value="-1">All</mat-option>
+          <mat-option *ngFor="let rn of roomNameArray" [value]="rn">
+            {{rn}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <mat-card class="teacherData">
+      <mat-card-header>
+        <mat-card-title>Shiba Inu</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-list>
+          <mat-list-item> Pepper </mat-list-item>
+          <mat-list-item> Salt </mat-list-item>
+          <mat-list-item> Paprika </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
+  </div>
 </div>

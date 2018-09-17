@@ -3,6 +3,7 @@ export var AppSettings = {
   studentArray : [],
   maleOfStudents : 0,
   femaleOfStudents : 0,
+  scheduleData: [],
   getStudentArray() {
     return this.studentArray;
   },
@@ -20,5 +21,11 @@ export var AppSettings = {
   },
   setFemaleStudents(fs) {
     this.femaleOfStudents = fs;
+  },
+  getScheduleData(){
+    return this.scheduleData;
+  },
+  setScheduleData(sd){
+    this.scheduleData = sd;
   }
 }
