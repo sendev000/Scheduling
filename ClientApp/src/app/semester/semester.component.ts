@@ -133,19 +133,35 @@ export class SemesterComponent implements OnInit {
     let scheduleData = AppSettings.getScheduleData();
     let teacherTempData = {},
       maxLength = 0;
-    for (let i = 0; i < this.teacherArray.length; i++) {
-      teacherTempData[this.teacherArray[i]] = [];
+
+    if (this.selectTeacher === -1){
+      for (let i = 0; i < this.teacherArray.length; i++) {
+        teacherTempData[this.teacherArray[i]] = [];
+      }
     }
+    else
+      teacherTempData[this.selectTeacher] = [];
     for (let i = 0; i < scheduleData.length; i++) {
       let eObj = scheduleData[i];
-      if (
-        teacherTempData[eObj['teacher_name']].indexOf(
-          eObj['course_section']
-        ) === -1
-      ) {
-        teacherTempData[eObj['teacher_name']].push(eObj['course_section']);
-        if (maxLength < teacherTempData[eObj['teacher_name']].length)
-          maxLength = teacherTempData[eObj['teacher_name']].length;
+      let check = true;
+      if (!teacherTempData[eObj['teacher_name']]) check = false;
+      if (this.selectSemester !== -1 && this.selectSemester !== eObj['semester'])
+        check = false;
+      if (this.selectRoom !== -1 && this.selectRoom !== eObj['room_name'])
+        check = false;
+      if (check)
+      {
+        teacherTempData[eObj['teacher_name']].push({
+          "course_section": eObj['course_section'],
+          "student_number": eObj['student_number'],
+          "semester": eObj['semester'],
+          "room_name": eObj['room_name'] 
+        });
+        // if (teacherTempData[eObj['teacher_name']].indexOf(eObj['course_section']) === -1) {
+        //     teacherTempData[eObj['teacher_name']].push(eObj['course_section']);
+        //     if (maxLength < teacherTempData[eObj['teacher_name']].length)
+        //       maxLength = teacherTempData[eObj['teacher_name']].length;
+        // }
       }
     }
 
@@ -154,14 +170,14 @@ export class SemesterComponent implements OnInit {
     for (let i = 0; i < maxLength; i++) {
       this.teacherObj[0]['course_' + (i + 1).toString()] = 'Course';
     }
-    for (let each in teacherTempData) {
-      let obj = {};
-      obj['teacher'] = each;
-      for (let i = 0; i < teacherTempData[each].length; i++) {
-        obj['course_' + (i + 1).toString()] = teacherTempData[each][i];
-      }
-      this.teacherObj.push(obj);
-    }
-    console.log(this.teacherObj);
+    // for (let each in teacherTempData) {
+    //   let obj = {};
+    //   obj['teacher'] = each;
+    //   for (let i = 0; i < teacherTempData[each].length; i++) {
+    //     obj['course_' + (i + 1).toString()] = teacherTempData[each][i];
+    //   }
+    //   this.teacherObj.push(obj);
+    // }
+    console.log(teacherTempData);
   }
 }
