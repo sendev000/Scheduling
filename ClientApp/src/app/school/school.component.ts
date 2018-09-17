@@ -11,6 +11,7 @@ import { environment as env } from '@env/environment';
 import { ROUTE_ANIMATIONS_ELEMENTS } from '@app/core';
 
 import { AppSettings } from '../global/global';
+import { ExcelService } from '../global/excelService';
 
 @Component({
   selector: 'anms-school',
@@ -21,7 +22,7 @@ export class SchoolComponent implements OnInit {
   routeAnimationsElements = ROUTE_ANIMATIONS_ELEMENTS;
   versions = env.versions;
 
-  scheduleArray: ScheduleElement[];
+  scheduleArray: ScheduleElement[] = [];
   displayedColumns: string[] = [
     'school_number',
     'school_name',
@@ -54,16 +55,8 @@ export class SchoolComponent implements OnInit {
   }
 
   exportData() {
-    // var options = {
-    //   fieldSeparator: ',',
-    //   quoteStrings: '"',
-    //   decimalseparator: '.',
-    //   showLabels: true,
-    //   useBom: true,
-    //   noDownload: false,
-    //   headers: this.displayedColumns
-    // };
-    // new Angular5Csv(this.scheduleArray, 'Schedule Data', options);
+    if (this.scheduleArray.length > 0)
+      ExcelService.exportAsExcelFile(this.scheduleArray, "Schedule", false);
   }
   importData() {
     this.editable = false;

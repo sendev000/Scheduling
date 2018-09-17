@@ -7,8 +7,8 @@ const EXCEL_EXTENSION = '.xlsx';
 
 export var ExcelService = {
 
-  exportAsExcelFile(json, excelFileName) {
-    const worksheet = XLSX.utils.json_to_sheet(json, {skipHeader: 1});
+  exportAsExcelFile(json, excelFileName, skipHeader) {
+    const worksheet = XLSX.utils.json_to_sheet(json, {skipHeader: skipHeader});
     const workbook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
     const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
     this.saveAsExcelFile(excelBuffer, excelFileName);
