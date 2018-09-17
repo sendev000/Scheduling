@@ -109,7 +109,6 @@ export class SemesterComponent implements OnInit {
         }
         if (this.teacherArray.indexOf(eObj['teacher_name']) === -1) {
           this.teacherArray.push(eObj['teacher_name']);
-          teacherTempData[eObj['teacher_name']] = [];
         }
       }
 
@@ -134,7 +133,9 @@ export class SemesterComponent implements OnInit {
     let scheduleData = AppSettings.getScheduleData();
     let teacherTempData = {},
       maxLength = 0;
-    // for (let i=0;i<this.)
+    for (let i = 0; i < this.teacherArray.length; i++) {
+      teacherTempData[this.teacherArray[i]] = [];
+    }
     for (let i = 0; i < scheduleData.length; i++) {
       let eObj = scheduleData[i];
       if (
@@ -148,6 +149,7 @@ export class SemesterComponent implements OnInit {
       }
     }
 
+    this.teacherObj = [];
     this.teacherObj.push({ teacher: 'Teacher' });
     for (let i = 0; i < maxLength; i++) {
       this.teacherObj[0]['course_' + (i + 1).toString()] = 'Course';
@@ -160,5 +162,6 @@ export class SemesterComponent implements OnInit {
       }
       this.teacherObj.push(obj);
     }
+    console.log(this.teacherObj);
   }
 }
