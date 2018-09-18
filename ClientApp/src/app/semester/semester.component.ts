@@ -116,6 +116,8 @@ export class SemesterComponent implements OnInit {
       this.termArray.sort();
       this.periodArray.sort();
       this.roomNameArray.sort();
+
+      this.updateContent();
     }
   }
 
@@ -129,12 +131,11 @@ export class SemesterComponent implements OnInit {
     this.updateContent();
   }
   updateContent() {
-    console.log(this.selectTeacher, this.selectSemester, this.selectRoom);
     let scheduleData = AppSettings.getScheduleData();
-    let teacherTempData = {},
+    let teacherTempData = {}, middleData = [],
       maxLength = 0;
 
-    if (this.selectTeacher === -1){
+    if (this.selectTeacher == -1){
       for (let i = 0; i < this.teacherArray.length; i++) {
         teacherTempData[this.teacherArray[i]] = [];
       }
@@ -145,39 +146,72 @@ export class SemesterComponent implements OnInit {
       let eObj = scheduleData[i];
       let check = true;
       if (!teacherTempData[eObj['teacher_name']]) check = false;
-      if (this.selectSemester !== -1 && this.selectSemester !== eObj['semester'])
+      if (this.selectSemester != -1 && this.selectSemester !== eObj['semester'])
         check = false;
-      if (this.selectRoom !== -1 && this.selectRoom !== eObj['room_name'])
+      if (this.selectRoom != -1 && this.selectRoom !== eObj['room_name'])
         check = false;
       if (check)
       {
+        let cs = eObj['course_section'].split("-");
         teacherTempData[eObj['teacher_name']].push({
-          "course_section": eObj['course_section'],
+          "course": cs[0],
+          "section": cs[1],
           "student_number": eObj['student_number'],
           "semester": eObj['semester'],
           "room_name": eObj['room_name'] 
         });
-        // if (teacherTempData[eObj['teacher_name']].indexOf(eObj['course_section']) === -1) {
-        //     teacherTempData[eObj['teacher_name']].push(eObj['course_section']);
-        //     if (maxLength < teacherTempData[eObj['teacher_name']].length)
-        //       maxLength = teacherTempData[eObj['teacher_name']].length;
-        // }
       }
     }
 
     this.teacherObj = [];
-    this.teacherObj.push({ teacher: 'Teacher' });
-    for (let i = 0; i < maxLength; i++) {
-      this.teacherObj[0]['course_' + (i + 1).toString()] = 'Course';
+    middleData = [];
+
+    for (let each in teacherTempData) {
+      let key, obj = {}, sorted = {};
+      for (let i=0;i<teacherTempData[each].length;i++)
+      {
+        key = teacherTempData[each][i]['course'] + "|||" + 
+                teacherTempData[each][i]['semester'] + "|||" + 
+                teacherTempData[each][i]['room_name'];
+        if (!obj[key]) obj[key] = [];
+        if (obj[key].indexOf(teacherTempData[each][i]['student_number']) === -1)
+        {
+          obj[key].push(teacherTempData[each][i]['student_number']);
+        }
+      }
+      Object.keys(obj).sort().forEach(function(key) {
+        sorted[key] = obj[key];
+      });
+
+      middleData[each] = sorted;
     }
-    // for (let each in teacherTempData) {
-    //   let obj = {};
-    //   obj['teacher'] = each;
-    //   for (let i = 0; i < teacherTempData[each].length; i++) {
-    //     obj['course_' + (i + 1).toString()] = teacherTempData[each][i];
-    //   }
-    //   this.teacherObj.push(obj);
-    // }
-    console.log(teacherTempData);
+
+    for (let each in middleData) {
+      let names = each.split(" ");
+      let obj1 = {data: [], name: each, lastname: names[1]};
+      for (let each1 in middleData[each]){
+        let key1 = each1.split("|||");
+        let obj = {};
+        obj["fullname"] = each;
+        obj["lastname"] = names[1];
+        obj["course"] = key1[0];
+        obj["semester"] = key1[1];
+        obj["room"] = key1[2];
+        obj["students"] = middleData[each][each1];
+        obj["nos"] = obj["students"].length;
+        obj1['data'].push(obj);
+      }
+      if (obj1['data'].length > 0)
+        this.teacherObj.push(obj1);
+    }
+    this.teacherObj.sort(compare);
   }
+}
+
+function compare(a,b) {
+  if (a.lastname < b.lastname)
+    return -1;
+  if (a.lastname > b.lastname)
+    return 1;
+  return 0;
 }

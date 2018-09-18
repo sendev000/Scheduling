@@ -1,7 +1,7 @@
 <div class="container">
   <div class="row">
     <h1 class="main-heading">
-      Semester Page
+      Teacher Analysis
     </h1>
   </div>
   <div class="row">
@@ -37,17 +37,22 @@
     </div>
   </div>
   <div class="row">
-    <mat-card class="teacherData">
-      <mat-card-header>
-        <mat-card-title>Shiba Inu</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <mat-list>
-          <mat-list-item> Pepper </mat-list-item>
-          <mat-list-item> Salt </mat-list-item>
-          <mat-list-item> Paprika </mat-list-item>
-        </mat-list>
-      </mat-card-content>
-    </mat-card>
+    <ng-container *ngFor="let td of teacherObj">
+      <mat-card class="teacher-data">
+        <mat-card-header>
+          <mat-card-title>{{td['name']}}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-list *ngFor="let tdd of td['data']">
+            <mat-list-item>
+              <p>Course: <b>{{tdd['course']}}</b></p> &nbsp;
+              <p>Semester: <b>{{tdd['semester']}}</b></p> &nbsp;
+              <p>Room: <b>{{tdd['room']}}</b></p> &nbsp;
+              <p>Number of Students: <b>{{tdd['nos']}}</b></p> &nbsp;
+            </mat-list-item>
+          </mat-list>
+        </mat-card-content>
+      </mat-card>
+    </ng-container>
   </div>
 </div>
