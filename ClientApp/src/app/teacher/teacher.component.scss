@@ -2,109 +2,46 @@
 
 .container {
   margin-top: 20px;
+  margin-bottom: 40px;
 }
-
-.button_rows{
-  padding: 0px;
-  margin-bottom: 15px;
-  & > div {
-     padding: 0px;
+.mat-card{
+  margin-bottom: 3px;
+}
+.mat-card-title{
+  font-size: 26px;
+  font-weight: bold;
+}
+.teacher-data-container{
+  > div{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 2px;
   }
 }
-
-.month {
-  padding: 20px 25px;
-  width: 100%;
-  background: #03a9f4;
-  text-align: center;
-}
-
-.month ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.month ul li {
-  color: white;
-  font-size: 20px;
-  text-transform: uppercase;
-  letter-spacing: 3px;
-}
-.month button{
-  min-width: 40px;
-}
-.month .prev, .month .prev_year {
-  float: left;
-  padding-top: 10px;
-  margin-right: 10px;
-}
-
-.month .next, .month .next_year {
-  float: right;
-  padding-top: 10px;
-  margin-left: 10px;
-}
-
-table {
-  width: 100%;
-  th, td{
-    width: 12.5%;
+.teacher-data{
+  border: 1px solid #CCC;
+  box-shadow: 1px 2px 3px #CCC;
+  padding: 10px;
+  ul{
+    margin-bottom: 0px;
+    li p{
+      margin-bottom: 0px;
+    }
   }
 }
-
-
-.day_buttons {
-  background: #EEEEEE;
-}
-.period, .class_name {
-  width: 100%;
-}
-.class_name{
-  font-size: 16px;
-  font-weight: 600;
-}
-
-/* Add media queries for smaller screens */
-@media screen and (max-width:720px) {
-  .weekdays li, .days li {
-    width: 13.1%;
-  }
-
-  .mat-cell, .mat-footer-cell.period, .class_name {
-    font-size: 11px;
-  }
-}
-
-@media screen and (min-width: 576px) {
-  .container {
-    max-width: 100%;
-  }
-  .mat-button {
-    min-width: auto;
+.data-show{
+  justify-content: space-between;
+  flex-direction: row-reverse;
+  .mat-form-field{
     width: 100%;
   }
-  td.mat-cell:first-child, th.mat-header-cell:first-child {
-    padding-left: 0px;
+}
+@media only screen and (min-width: 1200px)  {
+  .container{
+    max-width: 100%;
+    padding: 0 30px;
   }
-  td.mat-cell:last-child, th.mat-header-cell:last-child {
-    padding-right: 0px;
+  .teacher-data-container > div{
+    grid-template-columns: repeat(6, 1fr);
   }
 }
-
-@media screen and (max-width: 420px) {
-  .weekdays li, .days li {
-    width: 12.5%;
-  }
-
-  .days li .active {
-    padding: 2px;
-  }
-}
-
-@media screen and (max-width: 290px) {
-  .weekdays li, .days li {
-    width: 12.2%;
-  }
-}
-
