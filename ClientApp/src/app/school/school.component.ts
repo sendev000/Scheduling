@@ -59,7 +59,6 @@ export class SchoolComponent implements OnInit {
       ExcelService.exportAsExcelFile(this.scheduleArray, "Schedule", false);
   }
   importData() {
-    this.editable = false;
     setTimeout(function() {
       document.getElementById('importFile').click();
     });

@@ -36,10 +36,19 @@
         </mat-form-field>
       </div>
     </div>
-    <div class="col-md-9 room-data-container">
+    <div class="col-md-9">
       <h3>Total Counts: {{totalAnalysis}}</h3>
-      <div>
-        <ng-container *ngFor="let td of roomObj">
+      <div class="room-data-container">
+        <ng-container *ngFor="let ro of roomObj">
+          <div [ngStyle] = "{'grid-template-columns': 'repeat(' + maxColumn + ', 1fr)'}">
+            <ng-container *ngFor="let each of ro">
+              <div class="room-data">
+                {{each}}
+              </div>
+            </ng-container>
+          </div>
+        </ng-container>
+        <!-- <ng-container *ngFor="let td of roomObj">
           <div class="room-data">
             <div class="data-header">
               <h4>Room {{td['room']}} - {{td['semester']}}</h4>
@@ -52,7 +61,7 @@
               </ul>
             </div>
           </div>
-        </ng-container>
+        </ng-container> -->
       </div>
     </div>
   </div>

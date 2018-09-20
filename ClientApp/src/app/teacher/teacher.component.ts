@@ -34,9 +34,9 @@ export class TeacherComponent implements OnInit {
   teacherObj = [];
   totalAnalysis: number;
 
-  selectTeacher: string;
-  selectSemester: string;
-  selectRoom: string;
+  selectTeacher: number;
+  selectSemester: number;
+  selectRoom: number;
 
   ngOnInit() {
     this.init();

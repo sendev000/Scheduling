@@ -28,7 +28,7 @@ export class ClassComponent implements OnInit {
   }
 
   init() {
-    this.tempClass = "";
+    this.tempClass = 0;
     this.numberOfClass = 0; // default
     this.classes = [];
     for (let i=0;i<this.numberOfClass;i++)
