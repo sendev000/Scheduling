@@ -35,6 +35,7 @@ export class RoomComponent implements OnInit {
   roomObj = [];
   maxColumn = 0: number;
   totalAnalysis: number;
+  gridCSS: string;
 
   selectTeacher: number;
   selectSemester: number;
@@ -139,7 +140,6 @@ export class RoomComponent implements OnInit {
     let scheduleData = AppSettings.getScheduleData();
     let tempData = {}, count;
     let roomHash = {}, periodHash = {}, semesterHash = {}, hashPeriodSemester = {};
-    console.log(this.selectTeacher);
     for (let i=0;i<scheduleData.length;i++)
     {
       let eObj = scheduleData[i];
@@ -174,7 +174,6 @@ export class RoomComponent implements OnInit {
         hashPeriodSemester[key] = i * this.periodArray.length + j;
       }
     }
-    this.maxColumn = this.semesterArray.length * this.periodArray.length + 1;
     for (let i=0;i<this.roomNameArray.length;i++) {
       this.roomObj[ i+1 ] = [];
       this.roomObj[ i+1 ][0] = this.roomNameArray[i];
@@ -186,7 +185,7 @@ export class RoomComponent implements OnInit {
     for (let i=0;i<this.periodArray.length;i++) {
       periodHash[ this.periodArray[i] ] = i;
     }
-
+    this.maxColumn = this.semesterArray.length * this.periodArray.length + 1;
 
     for (let each in tempData) {
       let split = each.split("|||");
@@ -223,6 +222,9 @@ export class RoomComponent implements OnInit {
       }
     }
     this.totalAnalysis = this.roomObj.length - 1;
+    let min = Math.floor(100/this.maxColumn) - 1;
+    let max = Math.ceil(100/this.maxColumn) - 1;
+    this.gridCSS = 'repeat(auto-fit, minmax(' + min + '%,' + max + '%))';
 
     // let teacherTempData = {}, middleData = [],
     //   maxLength = 0;

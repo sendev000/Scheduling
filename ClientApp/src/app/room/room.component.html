@@ -1,6 +1,6 @@
 <div class="container">
   <h1 class="main-heading">
-    Room - Semester Analysis
+    Room - Semester/Period Analysis
   </h1>
   <div class="row data-show">
     <div class="col-md-3">
@@ -40,7 +40,7 @@
       <h3>Total Counts: {{totalAnalysis}}</h3>
       <div class="room-data-container">
         <ng-container *ngFor="let ro of roomObj">
-          <div [ngStyle] = "{'grid-template-columns': 'repeat(' + maxColumn + ', 1fr)'}">
+          <div [ngStyle] = "{'grid-template-columns': gridCSS}">
             <ng-container *ngFor="let each of ro">
               <div class="room-data">
                 {{each}}

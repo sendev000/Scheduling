@@ -1,6 +1,6 @@
 <div class="container">
   <h1 class="main-heading">
-    Teacher - Semester Analysis
+    Teacher - Semester/Period Analysis
   </h1>
   <div class="row data-show">
     <div class="col-md-3">
@@ -36,21 +36,16 @@
         </mat-form-field>
       </div>
     </div>
-    <div class="col-md-9 teacher-data-container">
+    <div class="col-md-9">
       <h3>Total Counts: {{totalAnalysis}}</h3>
-      <div>
-        <ng-container *ngFor="let td of teacherObj">
-          <div class="teacher-data">
-            <div class="data-header">
-              <h4>{{td['fullname']}} - {{td['semester']}}</h4>
-            </div>
-            <div class="data-content">
-              <ul>
-                <li><p>Course: <b>{{td['course']}}</b></p></li>
-                <li><p>Number of Students: <b>{{td['nos']}}</b></p></li>
-                <li><p>Room: <b>{{td['room']}}</b></p></li>
-              </ul>
-            </div>
+      <div class="teacher-data-container">
+        <ng-container *ngFor="let ro of teacherObj">
+          <div [ngStyle] = "{'grid-template-columns': gridCSS}">
+            <ng-container *ngFor="let each of ro">
+              <div class="teacher-data">
+                {{each}}
+              </div>
+            </ng-container>
           </div>
         </ng-container>
       </div>
