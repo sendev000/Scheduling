@@ -33,7 +33,7 @@ export class TeacherComponent implements OnInit {
 
   teacherObj = [];
   totalAnalysis: number;
-  maxColumn = 0: number;
+  maxColumn: number;
   gridCSS: string;
 
   selectTeacher: number;
@@ -206,7 +206,7 @@ export class TeacherComponent implements OnInit {
         if (arr && arr.length > 0){
           let sn = [];
           for (let k=0;k<arr.length;k++) {
-            if (sn.indexOf(arr[k]['student_number'] === -1)
+            if (sn.indexOf(arr[k]['student_number']) === -1)
               sn.push(arr[k]['student_number']);
           }
           obj[j] = arr[0]['course_section'] + " " + sn.length.toString() + " " + arr[0]['room_name'];
