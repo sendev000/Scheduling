@@ -6,6 +6,7 @@ import { environment as env } from '@env/environment';
 import { ROUTE_ANIMATIONS_ELEMENTS } from '@app/core';
 
 import { AppSettings } from '../global/global';
+import { ExcelService } from '../global/excelService';
 
 @Component({
   selector: 'anms-room',
@@ -169,7 +170,7 @@ export class RoomComponent implements OnInit {
     this.roomObj[0].push("Room");
     for (let i=0;i<this.semesterArray.length;i++) {
       for (let j=0;j<this.periodArray.length;j++) {
-        let key = "S" + i.toString() + " P" + j.toString();
+        let key = "S" + (i+1).toString() + " P" + (j+1).toString();
         this.roomObj[0].push(key);
         hashPeriodSemester[key] = i * this.periodArray.length + j;
       }
@@ -191,8 +192,8 @@ export class RoomComponent implements OnInit {
       let split = each.split("|||");
       let obj = tempData[each];
       let indR = roomHash[ split[0] ];
-      let indS = semesterHash[ split[1] ];
-      let indP = periodHash[ split[2] ];
+      let indS = semesterHash[ split[1] ] + 1;
+      let indP = periodHash[ split[2] ] + 1;
       let indSPKey = "S" + indS.toString() + " P" + indP.toString();
       let indSP = hashPeriodSemester[indSPKey];
       this.roomObj[indR+1][indSP + 1] = tempData[each];
@@ -204,14 +205,40 @@ export class RoomComponent implements OnInit {
       for (let j=1;j<this.maxColumn;j++) {
         let arr = obj[j];
         if (arr && arr.length > 0){
-          let sn = [];
-          for (let k=0;k<arr.length;k++) {
-            if (sn.indexOf(arr[k]['student_number']) === -1)
-              sn.push(arr[k]['student_number']);
+          let sn = [], names = arr[0]['teacher_name'].split(" ");
+          let firstLine = "", secondLine = "";
+          if (names.length > 1)
+            secondLine = names[0] + " " + names[1].substring(0,1).toUpperCase() + ".";
+          if (arr[0]['course_section'].indexOf("GLC") > -1 || arr[0]['course_section'].indexOf("CHV") > -1)
+          {
+            let cs = {};
+            for (let k=0;k<arr.length;k++) {
+              let section = arr[k]['course_section'];
+              if(cs[section])
+                cs[section]++;
+              else
+                cs[section] = 1;
+            }
+            const ordered = {};
+            Object.keys(cs).sort().forEach(function(key) {
+              ordered[key] = cs[key];
+            });
+            for (each in ordered) {
+              firstLine += each + " " + ordered[each].toString() + "<br/>";
+            }
+            obj[j] = firstLine + secondLine;
           }
-          obj[j] = arr[0]['course_section'] + " " + sn.length.toString() + " " + arr[0]['teacher_name'];
+          else
+          {
+            for (let k=0;k<arr.length;k++) {
+              if (sn.indexOf(arr[k]['student_number']) === -1)
+                sn.push(arr[k]['student_number']);
+            }
+            firstLine = arr[0]['course_section'] + " " + sn.length.toString();
+            obj[j] = firstLine + "<br/>" + secondLine;
+          }
         }
-        if (!obj[j]){
+        if (!obj[j] || obj[j].length === 0){
           obj[j] = "";
           emptyCount ++;
         }
@@ -225,82 +252,22 @@ export class RoomComponent implements OnInit {
     let min = Math.floor(100/this.maxColumn) - 1;
     let max = Math.ceil(100/this.maxColumn) - 1;
     this.gridCSS = 'repeat(auto-fit, minmax(' + min + '%,' + max + '%))';
-
-    // let teacherTempData = {}, middleData = [],
-    //   maxLength = 0;
-
-    // if (this.selectTeacher == -1){
-    //   for (let i = 0; i < this.teacherArray.length; i++) {
-    //     teacherTempData[this.teacherArray[i]] = [];
-    //   }
-    // }
-    // else
-    //   teacherTempData[this.selectTeacher] = [];
-    // for (let i = 0; i < scheduleData.length; i++) {
-    //   let eObj = scheduleData[i];
-    //   let check = true;
-    //   if (!teacherTempData[eObj['teacher_name']]) check = false;
-    //   if (this.selectSemester != -1 && this.selectSemester !== eObj['semester'])
-    //     check = false;
-    //   if (this.selectRoom != -1 && this.selectRoom !== eObj['room_name'])
-    //     check = false;
-    //   if (check)
-    //   {
-    //     let cs = eObj['course_section'].split("-");
-    //     teacherTempData[eObj['teacher_name']].push({
-    //       "course": cs[0],
-    //       "section": cs[1],
-    //       "student_number": eObj['student_number'],
-    //       "semester": eObj['semester'],
-    //       "room_name": eObj['room_name'] 
-    //     });
-    //   }
-    // }
-
-    // this.roomObj = [];
-    // middleData = [];
-
-    // for (let each in teacherTempData) {
-    //   let key, obj = {}, sorted = {};
-    //   for (let i=0;i<teacherTempData[each].length;i++)
-    //   {
-    //     key = teacherTempData[each][i]['room_name'] + "|||" + 
-    //             teacherTempData[each][i]['semester']
-    //              + "|||" + teacherTempData[each][i]['course'];
-    //     if (!obj[key]) obj[key] = [];
-    //     if (obj[key].indexOf(teacherTempData[each][i]['student_number']) === -1)
-    //     {
-    //       obj[key].push(teacherTempData[each][i]['student_number']);
-    //     }
-    //   }
-    //   Object.keys(obj).sort().forEach(function(key) {
-    //     sorted[key] = obj[key];
-    //   });
-
-    //   middleData[each] = sorted;
-    // }
-
-    // for (let each in middleData) {
-    //   let names = each.split(" ");
-    //   // let obj1 = {data: [], name: each, lastname: names[1]};
-    //   for (let each1 in middleData[each]){
-    //     let key1 = each1.split("|||");
-    //     let obj = {};
-    //     obj["fullname"] = each;
-    //     obj["sort"] = key1[0] + "___" + key1[1];
-    //     obj["room"] = key1[0];
-    //     obj["semester"] = key1[1];
-    //     obj["course"] = key1[2];
-    //     obj["students"] = middleData[each][each1];
-    //     obj["nos"] = obj["students"].length;
-    //     this.roomObj.push(obj);
-    //     // obj1['data'].push(obj);
-    //   }
-    //   // if (obj1['data'].length > 0)
-    //     // this.roomObj.push(obj1);
-    // }
-    // this.roomObj.sort(compare);
-    // this.totalAnalysis = this.roomObj.length;
+  }
+  exportData() {
+    let data = [], count;
+    let search = "<br/>";
+    let replacement = "\r\n ";
+    count = this.roomObj.length;
+    for (let i=1;i<count;i++) {
+      let obj = {}, key;
+      for (let j=0;j<this.maxColumn;j++){
+        key = this.roomObj[0][j];
+        obj[ key ] = this.roomObj[i][j].split(search).join(replacement);
+      }
+      data.push(obj);
+    }
+    if (data.length > 0)
+      ExcelService.exportAsExcelFile(data, "Room - Semester/Period Analysis", false);
   }
 }
 

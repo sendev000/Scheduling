@@ -35,6 +35,9 @@
           </mat-select>
         </mat-form-field>
       </div>
+      <div class="col-sm-12">
+        <button mat-raised-button [disabled]="(totalAnalysis === 0)" (click)="exportData()">Export</button>
+      </div>
     </div>
     <div class="col-md-9">
       <h3>Total Counts: {{totalAnalysis}}</h3>
