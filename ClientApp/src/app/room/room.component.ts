@@ -119,6 +119,7 @@ export class RoomComponent implements OnInit {
         }
       }
 
+      this.teacherArray.sort();
       this.semesterArray.sort();
       this.termArray.sort();
       this.periodArray.sort();

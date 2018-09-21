@@ -46,7 +46,7 @@
           <div [ngStyle] = "{'grid-template-columns': gridCSS}">
             <ng-container *ngFor="let each of ro">
               <div class="teacher-data">
-                {{each}}
+                <div [innerHTML]="each"></div>
               </div>
             </ng-container>
           </div>

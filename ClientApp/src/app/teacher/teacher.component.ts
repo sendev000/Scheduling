@@ -117,6 +117,7 @@ export class TeacherComponent implements OnInit {
         }
       }
 
+      this.teacherArray.sort();
       this.semesterArray.sort();
       this.termArray.sort();
       this.periodArray.sort();
@@ -175,8 +176,13 @@ export class TeacherComponent implements OnInit {
     }
     this.maxColumn = this.semesterArray.length * this.periodArray.length + 1;
     for (let i=0;i<this.teacherArray.length;i++) {
+      let names = this.teacherArray[i].split(" ");
+      let firstname = "";
       this.teacherObj[ i+1 ] = [];
-      this.teacherObj[ i+1 ][0] = this.teacherArray[i];
+      if (names.length > 1 && names[0].split("-").length > 1)
+        this.teacherObj[ i+1 ][0] = names[0].substring(0,1).toUpperCase() + ". " + names[1];
+      else  
+        this.teacherObj[ i+1 ][0] = this.teacherArray[i];
       teacherHash[ this.teacherArray[i] ] = i;
     }
     for (let i=0;i<this.semesterArray.length;i++) {
@@ -205,13 +211,35 @@ export class TeacherComponent implements OnInit {
         let arr = obj[j];
         if (arr && arr.length > 0){
           let sn = [];
-          for (let k=0;k<arr.length;k++) {
-            if (sn.indexOf(arr[k]['student_number']) === -1)
-              sn.push(arr[k]['student_number']);
+          let firstLine = "";
+          if (arr[0]['course_section'].indexOf("GLC") > -1 || arr[0]['course_section'].indexOf("CHV") > -1)
+          {
+            let cs = {};
+            for (let k=0;k<arr.length;k++) {
+              let section = arr[k]['course_section'];
+              if(cs[section])
+                cs[section]++;
+              else
+                cs[section] = 1;
+            }
+            const ordered = {};
+            Object.keys(cs).sort().forEach(function(key) {
+              ordered[key] = cs[key];
+            });
+            for (each in ordered) {
+              firstLine += each + " " + ordered[each].toString() + "<br/>";
+            }
+            obj[j] = firstLine + arr[0]['room_name'];
           }
-          obj[j] = arr[0]['course_section'] + " " + sn.length.toString() + " " + arr[0]['room_name'];
+          else{
+            for (let k=0;k<arr.length;k++) {
+              if (sn.indexOf(arr[k]['student_number']) === -1)
+                sn.push(arr[k]['student_number']);
+            }
+            obj[j] = arr[0]['course_section'] + " " + sn.length.toString() + "<br/>" + arr[0]['room_name'];
+          }
         }
-        if (!obj[j]){
+        if (!obj[j] || obj[j].length === 0){
           obj[j] = "";
           emptyCount ++;
         }
@@ -225,6 +253,22 @@ export class TeacherComponent implements OnInit {
     let min = Math.floor(100/this.maxColumn) - 1;
     let max = Math.ceil(100/this.maxColumn) - 1;
     this.gridCSS = 'repeat(auto-fit, minmax(' + min + '%,' + max + '%))';
+  }
+  exportData() {
+    let data = [], count;
+    let search = "<br/>";
+    let replacement = "\r\n ";
+    count = this.teacherObj.length;
+    for (let i=1;i<count;i++) {
+      let obj = {}, key;
+      for (let j=0;j<this.maxColumn;j++){
+        key = this.teacherObj[0][j];
+        obj[ key ] = this.teacherObj[i][j].split(search).join(replacement);
+      }
+      data.push(obj);
+    }
+    if (data.length > 0)
+      ExcelService.exportAsExcelFile(data, "Teacher - Semester/Period Analysis", false);
   }
 }
 
