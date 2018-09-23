@@ -1,5 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
+import {
+  FormControl,
+  FormGroupDirective,
+  NgForm,
+  Validators
+} from '@angular/forms';
 import { MatPaginator, MatTableDataSource } from '@angular/material';
 import { Angular5Csv } from 'angular5-csv/Angular5-csv';
 import { environment as env } from '@env/environment';
@@ -140,142 +145,158 @@ export class RoomComponent implements OnInit {
   }
   updateContent() {
     let scheduleData = AppSettings.getScheduleData();
-    let tempData = {}, count;
-    let roomHash = {}, periodHash = {}, semesterHash = {}, hashPeriodSemester = {};
-    for (let i=0;i<scheduleData.length;i++)
-    {
+    let tempData = {},
+      count;
+    let roomHash = {},
+      periodHash = {},
+      semesterHash = {},
+      hashPeriodSemester = {};
+    for (let i = 0; i < scheduleData.length; i++) {
       let eObj = scheduleData[i];
       let check = true;
-      if (this.selectTeacher != -1 && this.selectTeacher != eObj['teacher_name'])
+      if (
+        this.selectTeacher != -1 &&
+        this.selectTeacher != eObj['teacher_name']
+      )
         check = false;
       if (this.selectSemester != -1 && this.selectSemester != eObj['semester'])
         check = false;
       if (this.selectRoom != -1 && this.selectRoom != eObj['room_name'])
         check = false;
-      if (check)
-      {
-        let key = eObj['room_name'] + "|||" + 
-                  eObj['semester'].toString() + "|||" + 
-                  eObj['period'].toString();
-        if (!tempData[key])
-          tempData[key] = [];
+      if (check) {
+        let key =
+          eObj['room_name'] +
+          '|||' +
+          eObj['semester'].toString() +
+          '|||' +
+          eObj['period'].toString();
+        if (!tempData[key]) tempData[key] = [];
         else
           tempData[key].push({
-            "course_section": eObj['course_section'],
-            "student_number": eObj['student_number'],
-            "teacher_name": eObj['teacher_name']
-          })
+            course_section: eObj['course_section'],
+            student_number: eObj['student_number'],
+            teacher_name: eObj['teacher_name']
+          });
       }
     }
     this.roomObj[0] = [];
-    this.roomObj[0].push("Room");
-    for (let i=0;i<this.semesterArray.length;i++) {
-      for (let j=0;j<this.periodArray.length;j++) {
-        let key = "S" + (i+1).toString() + " P" + (j+1).toString();
+    this.roomObj[0].push('Room');
+    for (let i = 0; i < this.semesterArray.length; i++) {
+      for (let j = 0; j < this.periodArray.length; j++) {
+        let key = 'S' + (i + 1).toString() + ' P' + (j + 1).toString();
         this.roomObj[0].push(key);
         hashPeriodSemester[key] = i * this.periodArray.length + j;
       }
     }
-    for (let i=0;i<this.roomNameArray.length;i++) {
-      this.roomObj[ i+1 ] = [];
-      this.roomObj[ i+1 ][0] = this.roomNameArray[i];
-      roomHash[ this.roomNameArray[i] ] = i;
+    for (let i = 0; i < this.roomNameArray.length; i++) {
+      this.roomObj[i + 1] = [];
+      this.roomObj[i + 1][0] = this.roomNameArray[i];
+      roomHash[this.roomNameArray[i]] = i;
     }
-    for (let i=0;i<this.semesterArray.length;i++) {
-      semesterHash[ this.semesterArray[i] ] = i;
+    for (let i = 0; i < this.semesterArray.length; i++) {
+      semesterHash[this.semesterArray[i]] = i;
     }
-    for (let i=0;i<this.periodArray.length;i++) {
-      periodHash[ this.periodArray[i] ] = i;
+    for (let i = 0; i < this.periodArray.length; i++) {
+      periodHash[this.periodArray[i]] = i;
     }
     this.maxColumn = this.semesterArray.length * this.periodArray.length + 1;
 
     for (let each in tempData) {
-      let split = each.split("|||");
+      let split = each.split('|||');
       let obj = tempData[each];
-      let indR = roomHash[ split[0] ];
-      let indS = semesterHash[ split[1] ] + 1;
-      let indP = periodHash[ split[2] ] + 1;
-      let indSPKey = "S" + indS.toString() + " P" + indP.toString();
+      let indR = roomHash[split[0]];
+      let indS = semesterHash[split[1]] + 1;
+      let indP = periodHash[split[2]] + 1;
+      let indSPKey = 'S' + indS.toString() + ' P' + indP.toString();
       let indSP = hashPeriodSemester[indSPKey];
-      this.roomObj[indR+1][indSP + 1] = tempData[each];
+      this.roomObj[indR + 1][indSP + 1] = tempData[each];
     }
 
     count = this.roomObj.length;
-    for (let i=1;i<count;i++) {
-      let obj = this.roomObj[i], emptyCount = 0;
-      for (let j=1;j<this.maxColumn;j++) {
+    for (let i = 1; i < count; i++) {
+      let obj = this.roomObj[i],
+        emptyCount = 0;
+      for (let j = 1; j < this.maxColumn; j++) {
         let arr = obj[j];
-        if (arr && arr.length > 0){
-          let sn = [], names = arr[0]['teacher_name'].split(" ");
-          let firstLine = "", secondLine = "";
+        if (arr && arr.length > 0) {
+          let sn = [],
+            names = arr[0]['teacher_name'].split(' ');
+          let firstLine = '',
+            secondLine = '';
           if (names.length > 1)
-            secondLine = names[0] + " " + names[1].substring(0,1).toUpperCase() + ".";
-          if (arr[0]['course_section'].indexOf("GLC") > -1 || arr[0]['course_section'].indexOf("CHV") > -1)
-          {
+            secondLine =
+              names[0] + ' ' + names[1].substring(0, 1).toUpperCase() + '.';
+          if (
+            arr[0]['course_section'].indexOf('GLC') > -1 ||
+            arr[0]['course_section'].indexOf('CHV') > -1
+          ) {
             let cs = {};
-            for (let k=0;k<arr.length;k++) {
+            for (let k = 0; k < arr.length; k++) {
               let section = arr[k]['course_section'];
-              if(cs[section])
-                cs[section]++;
-              else
-                cs[section] = 1;
+              if (cs[section]) cs[section]++;
+              else cs[section] = 1;
             }
             const ordered = {};
-            Object.keys(cs).sort().forEach(function(key) {
-              ordered[key] = cs[key];
-            });
-            for (each in ordered) {
-              firstLine += each + " " + ordered[each].toString() + "<br/>";
+            Object.keys(cs)
+              .sort()
+              .forEach(function(key) {
+                ordered[key] = cs[key];
+              });
+            for (let each in ordered) {
+              firstLine += each + ' ' + ordered[each].toString() + '<br/>';
             }
             obj[j] = firstLine + secondLine;
-          }
-          else
-          {
-            for (let k=0;k<arr.length;k++) {
+          } else {
+            for (let k = 0; k < arr.length; k++) {
               if (sn.indexOf(arr[k]['student_number']) === -1)
                 sn.push(arr[k]['student_number']);
             }
-            firstLine = arr[0]['course_section'] + " " + sn.length.toString();
-            obj[j] = firstLine + "<br/>" + secondLine;
+            firstLine = arr[0]['course_section'] + ' ' + sn.length.toString();
+            obj[j] = firstLine + '<br/>' + secondLine;
           }
         }
-        if (!obj[j] || obj[j].length === 0){
-          obj[j] = "";
-          emptyCount ++;
+        if (!obj[j] || obj[j].length === 0) {
+          obj[j] = '';
+          emptyCount++;
         }
       }
-      if (emptyCount == this.maxColumn - 1){
-        this.roomObj.splice(i,1);
-        i--; count--;
+      if (emptyCount == this.maxColumn - 1) {
+        this.roomObj.splice(i, 1);
+        i--;
+        count--;
       }
     }
     this.totalAnalysis = this.roomObj.length - 1;
-    let min = Math.floor(100/this.maxColumn) - 1;
-    let max = Math.ceil(100/this.maxColumn) - 1;
+    let min = Math.floor(100 / this.maxColumn) - 1;
+    let max = Math.ceil(100 / this.maxColumn) - 1;
     this.gridCSS = 'repeat(auto-fit, minmax(' + min + '%,' + max + '%))';
   }
   exportData() {
-    let data = [], count;
-    let search = "<br/>";
-    let replacement = "\r\n ";
+    let data = [],
+      count;
+    let search = '<br/>';
+    let replacement = '\r\n ';
     count = this.roomObj.length;
-    for (let i=1;i<count;i++) {
-      let obj = {}, key;
-      for (let j=0;j<this.maxColumn;j++){
+    for (let i = 1; i < count; i++) {
+      let obj = {},
+        key;
+      for (let j = 0; j < this.maxColumn; j++) {
         key = this.roomObj[0][j];
-        obj[ key ] = this.roomObj[i][j].split(search).join(replacement);
+        obj[key] = this.roomObj[i][j].split(search).join(replacement);
       }
       data.push(obj);
     }
     if (data.length > 0)
-      ExcelService.exportAsExcelFile(data, "Room - Semester/Period Analysis", false);
+      ExcelService.exportAsExcelFile(
+        data,
+        'Room - Semester/Period Analysis',
+        false
+      );
   }
 }
 
-function compare(a,b) {
-  if (a.sort < b.sort)
-    return -1;
-  if (a.sort > b.sort)
-    return 1;
+function compare(a, b) {
+  if (a.sort < b.sort) return -1;
+  if (a.sort > b.sort) return 1;
   return 0;
 }
