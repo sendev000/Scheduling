@@ -34,6 +34,12 @@
           </button>
       </span>
 
+      <button mat-button [matMenuTriggerFor]="menu">Setup</button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item *ngFor="let item of navigation_setup" [routerLink]="[item.link]" routerLinkActive="active">{{item.label | translate}}</button>
+          
+        </mat-menu>
+
       <button mat-icon-button routerLink="settings" class="d-none d-sm-inline">
         <mat-icon fontSet="fas" fontIcon="fa-cog"></mat-icon>
       </button>

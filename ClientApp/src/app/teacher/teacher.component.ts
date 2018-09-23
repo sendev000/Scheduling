@@ -138,145 +138,162 @@ export class TeacherComponent implements OnInit {
   }
   updateContent() {
     let scheduleData = AppSettings.getScheduleData();
-    let tempData = {}, count;
-    let teacherHash = {}, periodHash = {}, semesterHash = {}, hashPeriodSemester = {};
-    for (let i=0;i<scheduleData.length;i++)
-    {
+    let tempData = {},
+      count;
+    let teacherHash = {},
+      periodHash = {},
+      semesterHash = {},
+      hashPeriodSemester = {};
+    for (let i = 0; i < scheduleData.length; i++) {
       let eObj = scheduleData[i];
       let check = true;
-      if (this.selectTeacher != -1 && this.selectTeacher != eObj['teacher_name'])
+      if (
+        this.selectTeacher != -1 &&
+        this.selectTeacher != eObj['teacher_name']
+      )
         check = false;
       if (this.selectSemester != -1 && this.selectSemester != eObj['semester'])
         check = false;
       if (this.selectRoom != -1 && this.selectRoom != eObj['room_name'])
         check = false;
-      if (check)
-      {
-        let key = eObj['teacher_name'] + "|||" + 
-                  eObj['semester'].toString() + "|||" + 
-                  eObj['period'].toString();
-        if (!tempData[key])
-          tempData[key] = [];
+      if (check) {
+        let key =
+          eObj['teacher_name'] +
+          '|||' +
+          eObj['semester'].toString() +
+          '|||' +
+          eObj['period'].toString();
+        if (!tempData[key]) tempData[key] = [];
         else
           tempData[key].push({
-            "course_section": eObj['course_section'],
-            "student_number": eObj['student_number'],
-            "room_name": eObj['room_name']
-          })
+            course_section: eObj['course_section'],
+            student_number: eObj['student_number'],
+            room_name: eObj['room_name']
+          });
       }
     }
     this.teacherObj[0] = [];
-    this.teacherObj[0].push("Teacher");
-    for (let i=0;i<this.semesterArray.length;i++) {
-      for (let j=0;j<this.periodArray.length;j++) {
-        let key = "S" + (i+1).toString() + " P" + (j+1).toString();
+    this.teacherObj[0].push('Teacher');
+    for (let i = 0; i < this.semesterArray.length; i++) {
+      for (let j = 0; j < this.periodArray.length; j++) {
+        let key = 'S' + (i + 1).toString() + ' P' + (j + 1).toString();
         this.teacherObj[0].push(key);
         hashPeriodSemester[key] = i * this.periodArray.length + j;
       }
     }
     this.maxColumn = this.semesterArray.length * this.periodArray.length + 1;
-    for (let i=0;i<this.teacherArray.length;i++) {
-      let names = this.teacherArray[i].split(" ");
-      let firstname = "";
-      this.teacherObj[ i+1 ] = [];
-      if (names.length > 1 && names[0].split("-").length > 1)
-        this.teacherObj[ i+1 ][0] = names[0].substring(0,1).toUpperCase() + ". " + names[1];
-      else  
-        this.teacherObj[ i+1 ][0] = this.teacherArray[i];
-      teacherHash[ this.teacherArray[i] ] = i;
+    for (let i = 0; i < this.teacherArray.length; i++) {
+      let names = this.teacherArray[i].split(' ');
+      let firstname = '';
+      this.teacherObj[i + 1] = [];
+      if (names.length > 1 && names[0].split('-').length > 1)
+        this.teacherObj[i + 1][0] =
+          names[0].substring(0, 1).toUpperCase() + '. ' + names[1];
+      else this.teacherObj[i + 1][0] = this.teacherArray[i];
+      teacherHash[this.teacherArray[i]] = i;
     }
-    for (let i=0;i<this.semesterArray.length;i++) {
-      semesterHash[ this.semesterArray[i] ] = i;
+    for (let i = 0; i < this.semesterArray.length; i++) {
+      semesterHash[this.semesterArray[i]] = i;
     }
-    for (let i=0;i<this.periodArray.length;i++) {
-      periodHash[ this.periodArray[i] ] = i;
+    for (let i = 0; i < this.periodArray.length; i++) {
+      periodHash[this.periodArray[i]] = i;
     }
-
 
     for (let each in tempData) {
-      let split = each.split("|||");
+      let split = each.split('|||');
       let obj = tempData[each];
-      let indR = teacherHash[ split[0] ];
-      let indS = semesterHash[ split[1] ] + 1;
-      let indP = periodHash[ split[2] ] + 1;
-      let indSPKey = "S" + indS.toString() + " P" + indP.toString();
+      let indR = teacherHash[split[0]];
+      let indS = semesterHash[split[1]] + 1;
+      let indP = periodHash[split[2]] + 1;
+      let indSPKey = 'S' + indS.toString() + ' P' + indP.toString();
       let indSP = hashPeriodSemester[indSPKey];
-      this.teacherObj[indR+1][indSP + 1] = tempData[each];
+      this.teacherObj[indR + 1][indSP + 1] = tempData[each];
     }
 
     count = this.teacherObj.length;
-    for (let i=1;i<count;i++) {
-      let obj = this.teacherObj[i], emptyCount = 0;
-      for (let j=1;j<this.maxColumn;j++) {
+    for (let i = 1; i < count; i++) {
+      let obj = this.teacherObj[i],
+        emptyCount = 0;
+      for (let j = 1; j < this.maxColumn; j++) {
         let arr = obj[j];
-        if (arr && arr.length > 0){
+        if (arr && arr.length > 0) {
           let sn = [];
-          let firstLine = "";
-          if (arr[0]['course_section'].indexOf("GLC") > -1 || arr[0]['course_section'].indexOf("CHV") > -1)
-          {
+          let firstLine = '';
+          if (
+            arr[0]['course_section'].indexOf('GLC') > -1 ||
+            arr[0]['course_section'].indexOf('CHV') > -1
+          ) {
             let cs = {};
-            for (let k=0;k<arr.length;k++) {
+            for (let k = 0; k < arr.length; k++) {
               let section = arr[k]['course_section'];
-              if(cs[section])
-                cs[section]++;
-              else
-                cs[section] = 1;
+              if (cs[section]) cs[section]++;
+              else cs[section] = 1;
             }
             const ordered = {};
-            Object.keys(cs).sort().forEach(function(key) {
-              ordered[key] = cs[key];
-            });
-            for (each in ordered) {
-              firstLine += each + " " + ordered[each].toString() + "<br/>";
+            Object.keys(cs)
+              .sort()
+              .forEach(function(key) {
+                ordered[key] = cs[key];
+              });
+            for (let each in ordered) {
+              firstLine += each + ' ' + ordered[each].toString() + '<br/>';
             }
             obj[j] = firstLine + arr[0]['room_name'];
-          }
-          else{
-            for (let k=0;k<arr.length;k++) {
+          } else {
+            for (let k = 0; k < arr.length; k++) {
               if (sn.indexOf(arr[k]['student_number']) === -1)
                 sn.push(arr[k]['student_number']);
             }
-            obj[j] = arr[0]['course_section'] + " " + sn.length.toString() + "<br/>" + arr[0]['room_name'];
+            obj[j] =
+              arr[0]['course_section'] +
+              ' ' +
+              sn.length.toString() +
+              '<br/>' +
+              arr[0]['room_name'];
           }
         }
-        if (!obj[j] || obj[j].length === 0){
-          obj[j] = "";
-          emptyCount ++;
+        if (!obj[j] || obj[j].length === 0) {
+          obj[j] = '';
+          emptyCount++;
         }
       }
-      if (emptyCount == this.maxColumn - 1){
-        this.teacherObj.splice(i,1);
-        i--; count--;
+      if (emptyCount == this.maxColumn - 1) {
+        this.teacherObj.splice(i, 1);
+        i--;
+        count--;
       }
     }
     this.totalAnalysis = this.teacherObj.length - 1;
-    let min = Math.floor(100/this.maxColumn) - 1;
-    let max = Math.ceil(100/this.maxColumn) - 1;
+    let min = Math.floor(100 / this.maxColumn) - 1;
+    let max = Math.ceil(100 / this.maxColumn) - 1;
     this.gridCSS = 'repeat(auto-fit, minmax(' + min + '%,' + max + '%))';
   }
   exportData() {
-    let data = [], count;
-    let search = "<br/>";
-    let replacement = "\r\n ";
+    let data = [],
+      count;
+    let search = '<br/>';
+    let replacement = '\r\n ';
     count = this.teacherObj.length;
-    for (let i=1;i<count;i++) {
-      let obj = {}, key;
-      for (let j=0;j<this.maxColumn;j++){
+    for (let i = 1; i < count; i++) {
+      let obj = {},
+        key;
+      for (let j = 0; j < this.maxColumn; j++) {
         key = this.teacherObj[0][j];
-        obj[ key ] = this.teacherObj[i][j].split(search).join(replacement);
+        obj[key] = this.teacherObj[i][j].split(search).join(replacement);
       }
       data.push(obj);
     }
     if (data.length > 0)
-      ExcelService.exportAsExcelFile(data, "Teacher - Semester/Period Analysis", false);
+      ExcelService.exportAsExcelFile(
+        data,
+        'Teacher - Semester/Period Analysis',
+        false
+      );
   }
 }
 
-function compare(a,b) {
-  if (a.lastname_semester < b.lastname_semester)
-    return -1;
-  if (a.lastname_semester > b.lastname_semester)
-    return 1;
+function compare(a, b) {
+  if (a.lastname_semester < b.lastname_semester) return -1;
+  if (a.lastname_semester > b.lastname_semester) return 1;
   return 0;
 }
-
