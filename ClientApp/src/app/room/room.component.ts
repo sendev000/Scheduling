@@ -180,17 +180,17 @@ export class RoomComponent implements OnInit {
       }
     }
     this.roomObj[0] = [];
-    this.roomObj[0].push('Room');
+    this.roomObj[0].push(['Room', "#FFFFFF"]);
     for (let i = 0; i < this.semesterArray.length; i++) {
       for (let j = 0; j < this.periodArray.length; j++) {
         let key = 'S' + (i + 1).toString() + ' P' + (j + 1).toString();
-        this.roomObj[0].push(key);
+        this.roomObj[0].push([key, "#FFFFFF"]);
         hashPeriodSemester[key] = i * this.periodArray.length + j;
       }
     }
     for (let i = 0; i < this.roomNameArray.length; i++) {
       this.roomObj[i + 1] = [];
-      this.roomObj[i + 1][0] = this.roomNameArray[i];
+      this.roomObj[i + 1][0] = [this.roomNameArray[i], "#FFFFFF"];
       roomHash[this.roomNameArray[i]] = i;
     }
     for (let i = 0; i < this.semesterArray.length; i++) {
@@ -245,18 +245,18 @@ export class RoomComponent implements OnInit {
             for (let each in ordered) {
               firstLine += each + ' ' + ordered[each].toString() + '<br/>';
             }
-            obj[j] = firstLine + secondLine;
+            obj[j] = [firstLine + secondLine, this.getColor(arr.length), arr.length];
           } else {
             for (let k = 0; k < arr.length; k++) {
               if (sn.indexOf(arr[k]['student_number']) === -1)
                 sn.push(arr[k]['student_number']);
             }
             firstLine = arr[0]['course_section'] + ' ' + sn.length.toString();
-            obj[j] = firstLine + '<br/>' + secondLine;
+            obj[j] = [firstLine + '<br/>' + secondLine, this.getColor(sn.length), arr.length];
           }
         }
         if (!obj[j] || obj[j].length === 0) {
-          obj[j] = '';
+          obj[j] = ["", this.getColor(0), 0];
           emptyCount++;
         }
       }
@@ -278,20 +278,38 @@ export class RoomComponent implements OnInit {
     let replacement = '\r\n ';
     count = this.roomObj.length;
     for (let i = 1; i < count; i++) {
-      let obj = {},
-        key;
+      let obj = {}, key;
       for (let j = 0; j < this.maxColumn; j++) {
-        key = this.roomObj[0][j];
-        obj[key] = this.roomObj[i][j].split(search).join(replacement);
+        key = this.roomObj[0][j][0];
+        obj[key] = this.roomObj[i][j][0].split(search).join(replacement);
+        if (j > 0){
+          key += " NoS";
+          if (this.roomObj[i][j][2] === 0)
+            obj[key] = "";
+          else
+            obj[key] = this.roomObj[i][j][2];
+        }
       }
       data.push(obj);
     }
     if (data.length > 0)
+      // ExcelService.exportAsColorFulExcelFile(data, "Room - Semester/period Analysis", "Room-Semester");
       ExcelService.exportAsExcelFile(
         data,
         'Room - Semester/Period Analysis',
         false
       );
+  }
+  getColor(num) {
+    let c = num / 20 * 100;
+    if (c === 0)
+      return "#FFC7CE";
+    else if (c < 50)
+      return "#E26B00";
+    else if (c < 100)
+      return "#FFFF00";
+    else
+      return "#FFFFFF";
   }
 }
 
@@ -300,3 +318,70 @@ function compare(a, b) {
   if (a.sort > b.sort) return 1;
   return 0;
 }
+
+
+
+// function Workbook() {
+//     if(!(this instanceof Workbook)) return new Workbook();
+//     this.SheetNames = [];
+//     this.Sheets = {};
+// }
+
+// function sheet_from_array_of_arrays(data, opts) {
+//     var ws = {};
+//     var range = {s: {c:10000000, r:10000000}, e: {c:0, r:0 }};
+//     for(var R = 0; R != data.length; ++R) {
+//         for(var C = 0; C != data[R].length; ++C) {
+//             if(range.s.r > R) range.s.r = R;
+//             if(range.s.c > C) range.s.c = C;
+//             if(range.e.r < R) range.e.r = R;
+//             if(range.e.c < C) range.e.c = C;
+//             var cell = {};
+//             cell['v'] = data[R][C];
+//             cell['s'] = {}
+//             cell['s']['alignment'] = {'textRotation': 90 };
+//             cell['font'] = {'sz': 14, 'bold': true, 'color': "#FF00FF" };
+//             // cell = {'v': data[R][C],
+//             //           's': { 'alignment': {'textRotation': 90 },
+//             //           'font': {'sz': 14, 'bold': true, 'color': #FF00FF }
+//             //         };
+//             if(cell.v == null) continue;
+//             var cell_ref = XLSX.utils.encode_cell({c:C,r:R});
+
+//             if(typeof cell.v === 'number') cell.t = 'n';
+//             else if(typeof cell.v === 'boolean') cell.t = 'b';
+//             else if(cell.v instanceof Date) {
+//                 cell.t = 'n'; cell.z = XLSX.SSF._table[14];
+//                 cell.v = datenum(cell.v);
+//             }
+//             else cell.t = 's';
+
+//             ws[cell_ref] = cell;
+//         }
+//     }
+//     if(range.s.c < 10000000) ws['!ref'] = XLSX.utils.encode_range(range);
+//     return ws;
+// }
+// function s2ab(s) {
+//     var buf = new ArrayBuffer(s.length);
+//     var view = new Uint8Array(buf);
+//     for (var i=0; i!=s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
+//     return buf;
+// }
+// function GenerateExcelFile(inData, colWidth){
+//   var wb = new Workbook();
+//   var ws = sheet_from_array_of_arrays(inData); 
+
+//   var ws_name = "SheetJS";  
+
+//   /* add worksheet to workbook */
+//   wb.SheetNames.push(ws_name);
+//   wb.Sheets[ws_name] = ws;
+//   /* TEST: column widths */
+//   ws['!cols'] = colWidth;
+
+//   var wbout = XLSX.write(wb, {bookType:'xlsx', bookSST:true, type: 'binary'});
+//   console.log(s2ab[wbout]);
+//   // saveAs(new Blob([s2ab(wbout)],{type:"application/octet-stream"}), "test.xlsx")
+
+// }

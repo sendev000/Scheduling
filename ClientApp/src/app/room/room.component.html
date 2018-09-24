@@ -45,9 +45,8 @@
         <ng-container *ngFor="let ro of roomObj;let i=index">
           <div [ngStyle] = "{'grid-template-columns': gridCSS}">
             <ng-container *ngFor="let each of ro;let j=index">
-              <div class="room-data">
-                <div [innerHTML]="each"></div>
-                
+              <div class="room-data" [ngStyle]="{'background': each[1]}">
+                <div [innerHTML]="each[0]"></div>
               </div>
             </ng-container>
           </div>

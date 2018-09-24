@@ -55,7 +55,7 @@ export class AppComponent implements OnInit, OnDestroy {
     // { link: 'class', label: 'anms.menu.class' },
     { link: 'student', label: 'anms.menu.student' },
     { link: 'schedule', label: 'anms.menu.schedule' },
-    { link: 'about', label: 'anms.menu.about' }
+    // { link: 'about', label: 'anms.menu.about' }
   ];
 
   navigation_setup = [
@@ -68,6 +68,10 @@ export class AppComponent implements OnInit, OnDestroy {
     { link: 'class', label: 'anms.menu.class' }
 
     // { link: 'about', label: 'anms.menu.about' },
+  ];
+
+  navigation_about =[
+    { link: 'about', label: 'anms.menu.about' }
   ];
   navigationSideMenu = [
     ...this.navigation,
