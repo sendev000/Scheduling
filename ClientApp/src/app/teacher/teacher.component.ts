@@ -173,11 +173,12 @@ export class TeacherComponent implements OnInit {
       }
     }
     this.teacherObj[0] = [];
-    this.teacherObj[0].push('Teacher');
+    this.teacherObj[0].push(['Teacher', '#FFFFFF']);
     for (let i = 0; i < this.semesterArray.length; i++) {
       for (let j = 0; j < this.periodArray.length; j++) {
         let key = 'S' + (i + 1).toString() + ' P' + (j + 1).toString();
-        this.teacherObj[0].push(key);
+        this.teacherObj[0].push([key, "#FFFFFF"]);
+
         hashPeriodSemester[key] = i * this.periodArray.length + j;
       }
     }
@@ -187,9 +188,9 @@ export class TeacherComponent implements OnInit {
       let firstname = '';
       this.teacherObj[i + 1] = [];
       if (names.length > 1 && names[0].split('-').length > 1)
-        this.teacherObj[i + 1][0] =
-          names[0].substring(0, 1).toUpperCase() + '. ' + names[1];
-      else this.teacherObj[i + 1][0] = this.teacherArray[i];
+        this.teacherObj[i + 1][0] = [names[0].substring(0, 1).toUpperCase() + '. ' + names[1], "#FFFFFF"];
+      else
+        this.teacherObj[i + 1][0] = [this.teacherArray[i], "#FFFFFF"];
       teacherHash[this.teacherArray[i]] = i;
     }
     for (let i = 0; i < this.semesterArray.length; i++) {
@@ -238,22 +239,22 @@ export class TeacherComponent implements OnInit {
             for (let each in ordered) {
               firstLine += each + ' ' + ordered[each].toString() + '<br/>';
             }
-            obj[j] = firstLine + arr[0]['room_name'];
+            obj[j] = [firstLine + arr[0]['room_name'], this.getColor(arr.length), arr.length];
           } else {
             for (let k = 0; k < arr.length; k++) {
               if (sn.indexOf(arr[k]['student_number']) === -1)
                 sn.push(arr[k]['student_number']);
             }
-            obj[j] =
+            obj[j] = [
               arr[0]['course_section'] +
               ' ' +
               sn.length.toString() +
               '<br/>' +
-              arr[0]['room_name'];
+              arr[0]['room_name'], this.getColor(sn.length), arr.length;
           }
         }
         if (!obj[j] || obj[j].length === 0) {
-          obj[j] = '';
+          obj[j] = ["", this.getColor(0), 0];
           emptyCount++;
         }
       }
@@ -278,8 +279,15 @@ export class TeacherComponent implements OnInit {
       let obj = {},
         key;
       for (let j = 0; j < this.maxColumn; j++) {
-        key = this.teacherObj[0][j];
-        obj[key] = this.teacherObj[i][j].split(search).join(replacement);
+        key = this.teacherObj[0][j][0];
+        obj[key] = this.teacherObj[i][j][0].split(search).join(replacement);
+        if (j > 0){
+          key += " NoS";
+          if (this.teacherObj[i][j][2] === 0)
+            obj[key] = "";
+          else
+            obj[key] = this.teacherObj[i][j][2];
+        }
       }
       data.push(obj);
     }
@@ -289,6 +297,17 @@ export class TeacherComponent implements OnInit {
         'Teacher - Semester/Period Analysis',
         false
       );
+  }
+  getColor(num) {
+    let c = num / 20 * 100;
+    if (c === 0)
+      return "#FFC7CE";
+    else if (c < 50)
+      return "#E26B00";
+    else if (c < 100)
+      return "#FFFF00";
+    else
+      return "#FFFFFF";
   }
 }
 
