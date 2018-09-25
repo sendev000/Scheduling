@@ -42,6 +42,8 @@ export class RoomComponent implements OnInit {
   maxColumn: number;
   totalAnalysis: number;
   gridCSS: string;
+  chk: boolean;
+  sp_color: boolean;
 
   selectTeacher: number;
   selectSemester: number;
@@ -59,6 +61,9 @@ export class RoomComponent implements OnInit {
     this.selectTeacher = -1;
     this.selectSemester = -1;
     this.selectRoom = -1;
+
+    this.chk=true;
+    this.sp_color=true;
   }
   initFromGlobalData() {
     let scheduleData = AppSettings.getScheduleData();
@@ -173,7 +178,7 @@ export class RoomComponent implements OnInit {
         if (!tempData[key]) tempData[key] = [];
         else
           tempData[key].push({
-            course_section: eObj['course_section'],
+            course_section: eObj['course_section'].substring(0, 5),
             student_number: eObj['student_number'],
             teacher_name: eObj['teacher_name']
           });
@@ -221,11 +226,14 @@ export class RoomComponent implements OnInit {
         if (arr && arr.length > 0) {
           let sn = [],
             names = arr[0]['teacher_name'].split(' ');
-          let firstLine = '',
-            secondLine = '';
+          let firstLine = '', secondLine = '';
           if (names.length > 1)
-            secondLine =
-              names[0] + ' ' + names[1].substring(0, 1).toUpperCase() + '.';
+            secondLine = names[0] + ' ' + names[1].substring(0, 1).toUpperCase() + '.';
+
+          if(arr[0]['course_section'].substring(0,1)=="K")
+            this.sp_color=false;
+          else
+            this.sp_color=true;
           if (
             arr[0]['course_section'].indexOf('GLC') > -1 ||
             arr[0]['course_section'].indexOf('CHV') > -1
@@ -245,14 +253,22 @@ export class RoomComponent implements OnInit {
             for (let each in ordered) {
               firstLine += each + ' ' + ordered[each].toString() + '<br/>';
             }
-            obj[j] = [firstLine + secondLine, this.getColor(arr.length), arr.length];
+
+            if (this.sp_color==true)
+              obj[j] = [firstLine + secondLine, this.getColor(arr.length), arr.length];
+            else
+              obj[j] = [firstLine + secondLine, "#FFFFFF", arr.length];
           } else {
             for (let k = 0; k < arr.length; k++) {
               if (sn.indexOf(arr[k]['student_number']) === -1)
                 sn.push(arr[k]['student_number']);
             }
             firstLine = arr[0]['course_section'] + ' ' + sn.length.toString();
-            obj[j] = [firstLine + '<br/>' + secondLine, this.getColor(sn.length), arr.length];
+
+            if (this.sp_color==true)
+              obj[j] = [firstLine + '<br/>' + secondLine, this.getColor(sn.length), arr.length];
+            else
+              obj[j] = [firstLine + '<br/>' + secondLine, "#FFFFFF", arr.length];
           }
         }
         if (!obj[j] || obj[j].length === 0) {
@@ -272,22 +288,40 @@ export class RoomComponent implements OnInit {
     this.gridCSS = 'repeat(auto-fit, minmax(' + min + '%,' + max + '%))';
   }
   exportData() {
-    let data = [],
-      count;
+    let data = [], count;
     let search = '<br/>';
     let replacement = '\r\n ';
     count = this.roomObj.length;
     for (let i = 1; i < count; i++) {
-      let obj = {}, key;
+      let obj = {}, key, key1;
       for (let j = 0; j < this.maxColumn; j++) {
         key = this.roomObj[0][j][0];
-        obj[key] = this.roomObj[i][j][0].split(search).join(replacement);
+        let rr = this.roomObj[i][j][0].split(search).join(replacement);
+
+        let sp=rr.split(' ');
+        if (j==0){
+          obj[key]=rr;
+        }
         if (j > 0){
-          key += " NoS";
+
+
+          key1 = key + " Seciton";
           if (this.roomObj[i][j][2] === 0)
-            obj[key] = "";
+            obj[key1] = "";
           else
-            obj[key] = this.roomObj[i][j][2];
+            obj[key1] = sp[0];
+
+          key1 = key + " Student";
+          if (this.roomObj[i][j][2] === 0)
+            obj[key1] = "";
+          else
+            obj[key1] = this.roomObj[i][j][2];
+
+          key1 = key + " Teacher";
+          if (this.roomObj[i][j][2] === 0)
+            obj[key1] = "";
+          else
+            obj[key1] = sp[2]+" "+sp[3];
         }
       }
       data.push(obj);
@@ -301,6 +335,9 @@ export class RoomComponent implements OnInit {
       );
   }
   getColor(num) {
+    if(this.chk==false) return "#FFFFFF";
+
+
     let c = num / 20 * 100;
     if (c === 0)
       return "#FFC7CE";
@@ -310,6 +347,12 @@ export class RoomComponent implements OnInit {
       return "#FFFF00";
     else
       return "#FFFFFF";
+  }
+
+  setColor($event){
+    if (this.totalAnalysis==0) return;
+    this.chk=!this.chk;
+    this.updateContent();
   }
 }
 
