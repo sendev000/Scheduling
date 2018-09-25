@@ -44,6 +44,7 @@ export class RoomComponent implements OnInit {
   gridCSS: string;
   chk: boolean;
   sp_color: boolean;
+  sh_cou: boolean;
 
   selectTeacher: number;
   selectSemester: number;
@@ -64,6 +65,7 @@ export class RoomComponent implements OnInit {
 
     this.chk=true;
     this.sp_color=true;
+    this.sh_cou=false;
   }
   initFromGlobalData() {
     let scheduleData = AppSettings.getScheduleData();
@@ -178,7 +180,7 @@ export class RoomComponent implements OnInit {
         if (!tempData[key]) tempData[key] = [];
         else
           tempData[key].push({
-            course_section: eObj['course_section'].substring(0, 5),
+            course_section: eObj['course_section'],
             student_number: eObj['student_number'],
             teacher_name: eObj['teacher_name']
           });
@@ -226,7 +228,7 @@ export class RoomComponent implements OnInit {
         if (arr && arr.length > 0) {
           let sn = [],
             names = arr[0]['teacher_name'].split(' ');
-          let firstLine = '', secondLine = '';
+          let firstLine = '', secondLine = '', thirdLine = ''; //second line is teacher name
           if (names.length > 1)
             secondLine = names[0] + ' ' + names[1].substring(0, 1).toUpperCase() + '.';
 
@@ -234,6 +236,9 @@ export class RoomComponent implements OnInit {
             this.sp_color=false;
           else
             this.sp_color=true;
+
+
+          thirdLine=arr[0]['course_section'].substring(0, 5);
           if (
             arr[0]['course_section'].indexOf('GLC') > -1 ||
             arr[0]['course_section'].indexOf('CHV') > -1
@@ -254,10 +259,20 @@ export class RoomComponent implements OnInit {
               firstLine += each + ' ' + ordered[each].toString() + '<br/>';
             }
 
-            if (this.sp_color==true)
-              obj[j] = [firstLine + secondLine, this.getColor(arr.length), arr.length];
+            if(this.sh_cou==true){
+              if (this.sp_color==true)
+              obj[j] = [firstLine + secondLine+'<br/>' + thirdLine, this.getColor(arr.length), arr.length];
             else
-              obj[j] = [firstLine + secondLine, "#FFFFFF", arr.length];
+              obj[j] = [firstLine + secondLine +'<br/>'+ thirdLine, "#FFFFFF", arr.length];  
+            }
+            else {
+              if (this.sp_color==true)
+                obj[j] = [firstLine + secondLine, this.getColor(arr.length), arr.length];
+              else
+                obj[j] = [firstLine + secondLine, "#FFFFFF", arr.length];
+            }
+
+            
           } else {
             for (let k = 0; k < arr.length; k++) {
               if (sn.indexOf(arr[k]['student_number']) === -1)
@@ -265,10 +280,19 @@ export class RoomComponent implements OnInit {
             }
             firstLine = arr[0]['course_section'] + ' ' + sn.length.toString();
 
-            if (this.sp_color==true)
+            if(this.sh_cou==true){
+              if (this.sp_color==true)
+              obj[j] = [firstLine + '<br/>' + secondLine+ '<br/>' + thirdLine, this.getColor(sn.length), arr.length];
+            else
+              obj[j] = [firstLine + '<br/>' + secondLine+ '<br/>' + thirdLine, "#FFFFFF", arr.length];  
+            }else{
+              if (this.sp_color==true)
               obj[j] = [firstLine + '<br/>' + secondLine, this.getColor(sn.length), arr.length];
             else
               obj[j] = [firstLine + '<br/>' + secondLine, "#FFFFFF", arr.length];
+            }
+
+            
           }
         }
         if (!obj[j] || obj[j].length === 0) {
@@ -352,6 +376,12 @@ export class RoomComponent implements OnInit {
   setColor($event){
     if (this.totalAnalysis==0) return;
     this.chk=!this.chk;
+    this.updateContent();
+  }
+
+  showCourse($event){
+    if (this.totalAnalysis==0) return;
+    this.sh_cou=!this.sh_cou;
     this.updateContent();
   }
 }

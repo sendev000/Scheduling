@@ -20,6 +20,7 @@ import { StaticModule } from './static';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { RoomeditComponent } from './roomedit/roomedit.component';
 
 @NgModule({
   imports: [
@@ -46,11 +47,12 @@ import { AppComponent } from './app.component';
     ClassModule,
     StudentModule,
     ScheduleModule,
+    //RoomeditModule,
     
     // app
     AppRoutingModule
   ],
-  declarations: [AppComponent],
+  declarations: [AppComponent, RoomeditComponent],
   providers: [],
   bootstrap: [AppComponent]
 })

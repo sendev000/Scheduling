@@ -49,6 +49,17 @@
           (change)="setColor($event)" [checked]="chk">
         </mat-slide-toggle>
       </div>
+
+      <br />
+      
+      <div class="icon-form-field">
+        <mat-icon fontSet="fas" fontIcon="fa-window-maximize" color="accent"></mat-icon>
+        <mat-placeholder>Show Cousre
+        </mat-placeholder>
+        <mat-slide-toggle        
+          (change)="showCourse($event)" [checked]="sh_cou">
+        </mat-slide-toggle>
+      </div>
     </div>
     <div class="col-md-9">
       <h3>Total Counts: {{totalAnalysis}}</h3>

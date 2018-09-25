@@ -67,9 +67,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
     { link: 'course', label: 'anms.menu.course' },
     { link: 'section', label: 'anms.menu.section' },
-    { link: 'class', label: 'anms.menu.class' }
+    { link: 'class', label: 'anms.menu.class' },
 
-    // { link: 'about', label: 'anms.menu.about' },
+    { link: 'roomedit', label: 'anms.menu.roomedit' }
   ];
 
 
