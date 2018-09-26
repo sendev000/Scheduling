@@ -35,6 +35,9 @@ export class TeacherComponent implements OnInit {
   totalAnalysis: number;
   maxColumn: number;
   gridCSS: string;
+  chk: boolean;
+  sp_color: boolean;
+  sh_cou: boolean;
 
   selectTeacher: number;
   selectSemester: number;
@@ -52,6 +55,10 @@ export class TeacherComponent implements OnInit {
     this.selectTeacher = -1;
     this.selectSemester = -1;
     this.selectRoom = -1;
+
+    this.chk=true;
+    this.sp_color=true;
+    this.sh_cou=false;
   }
   initFromGlobalData() {
     let scheduleData = AppSettings.getScheduleData();
@@ -220,6 +227,15 @@ export class TeacherComponent implements OnInit {
         if (arr && arr.length > 0) {
           let sn = [];
           let firstLine = '';
+          let thirdLine='';
+
+          thirdLine=arr[0]['course_section'].substring(0, 5);
+
+          if(arr[0]['course_section'].substring(0,1)=="K")
+            this.sp_color=false;
+          else
+            this.sp_color=true;
+
           if (
             arr[0]['course_section'].indexOf('GLC') > -1 ||
             arr[0]['course_section'].indexOf('CHV') > -1
@@ -239,18 +255,52 @@ export class TeacherComponent implements OnInit {
             for (let each in ordered) {
               firstLine += each + ' ' + ordered[each].toString() + '<br/>';
             }
-            obj[j] = [firstLine + arr[0]['room_name'], this.getColor(arr.length), arr.length];
+
+            if(this.sh_cou==true){
+              if(this.sp_color==true)
+                obj[j] = [firstLine + arr[0]['room_name']+ '<br/>' + thirdLine, this.getColor(arr.length), arr.length];
+              else
+                obj[j] = [firstLine + arr[0]['room_name']+ '<br/>' + thirdLine, "#FFFFFF", arr.length];  
+            }
+            else {
+              if(this.sp_color==true)
+                obj[j] = [firstLine + arr[0]['room_name'], this.getColor(arr.length), arr.length];
+              else
+                obj[j] = [firstLine + arr[0]['room_name'], "#FFFFFF", arr.length];
+            }
+            
           } else {
             for (let k = 0; k < arr.length; k++) {
               if (sn.indexOf(arr[k]['student_number']) === -1)
                 sn.push(arr[k]['student_number']);
             }
-            obj[j] = [
-              arr[0]['course_section'] +
-              ' ' +
-              sn.length.toString() +
-              '<br/>' +
-              arr[0]['room_name'], this.getColor(sn.length), arr.length;
+
+            if(this.sh_cou){
+              if(this.sp_color==true)
+                obj[j] = [ arr[0]['course_section'] + ' ' +
+                sn.length.toString() +
+                '<br/>' +
+                arr[0]['room_name']+ '<br/>' + thirdLine, this.getColor(sn.length), arr.length];
+              else
+                obj[j] = [ arr[0]['course_section'] + ' ' +
+                sn.length.toString() +
+                '<br/>' +
+                arr[0]['room_name']+ '<br/>' + thirdLine, "#FFFFFF", arr.length];  
+            }
+            else {
+              if(this.sp_color==true)
+                obj[j] = [ arr[0]['course_section'] + ' ' +
+                sn.length.toString() +
+                '<br/>' +
+                arr[0]['room_name'], this.getColor(sn.length), arr.length];
+              else
+                obj[j] = [ arr[0]['course_section'] + ' ' +
+                sn.length.toString() +
+                '<br/>' +
+                arr[0]['room_name'], "#FFFFFF", arr.length];  
+            }
+
+            
           }
         }
         if (!obj[j] || obj[j].length === 0) {
@@ -276,17 +326,46 @@ export class TeacherComponent implements OnInit {
     let replacement = '\r\n ';
     count = this.teacherObj.length;
     for (let i = 1; i < count; i++) {
-      let obj = {},
-        key;
+      let obj = {},  key, key1;
       for (let j = 0; j < this.maxColumn; j++) {
         key = this.teacherObj[0][j][0];
-        obj[key] = this.teacherObj[i][j][0].split(search).join(replacement);
+        let rr = this.teacherObj[i][j][0].split(search).join(replacement);
+        let sp=rr.split(' ');
+        let len;
+        len=Math.floor((sp.length-1) / 2)-1;
+        if(j==0){
+          obj[key]=rr;
+        }
         if (j > 0){
-          key += " NoS";
+          key1=key+" Section";          
           if (this.teacherObj[i][j][2] === 0)
-            obj[key] = "";
+            obj[key1] = "";
           else
-            obj[key] = this.teacherObj[i][j][2];
+            obj[key1] = sp[0];
+            for(let l=1;l<=len;l++){
+              obj[key1]=obj[key1]+" "+sp[l*2];
+            }
+            
+
+          key1=key+" Student";          
+          if (this.teacherObj[i][j][2] === 0)
+            obj[key1] = "";
+          else
+            obj[key1] = sp[1];
+            for(let l=1;l<=len;l++){
+              obj[key1]=obj[key1]+" "+sp[l*2+1];
+            }
+
+          key1=key+" Room";          
+          if (this.teacherObj[i][j][2] === 0){
+            obj[key1] = "";
+          }
+          else{
+            obj[key1] = sp[len*2+2];
+            if (sp.length % 2==0)
+              obj[key1]=sp[len*2+2]+" "+sp[len*2+3];
+          }
+
         }
       }
       data.push(obj);
@@ -299,6 +378,8 @@ export class TeacherComponent implements OnInit {
       );
   }
   getColor(num) {
+    if(this.chk==false) return "#FFFFFF";
+
     let c = num / 20 * 100;
     if (c === 0)
       return "#FFC7CE";
@@ -308,6 +389,18 @@ export class TeacherComponent implements OnInit {
       return "#FFFF00";
     else
       return "#FFFFFF";
+  }
+
+  setColor($event){
+    if (this.totalAnalysis==0) return;
+    this.chk=!this.chk;
+    this.updateContent();
+  }
+
+  showCourse($event){
+    if (this.totalAnalysis==0) return;
+    this.sh_cou=!this.sh_cou;
+    this.updateContent();
   }
 }
 

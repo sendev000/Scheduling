@@ -54,8 +54,10 @@ export class AppComponent implements OnInit, OnDestroy {
     // { link: 'section', label: 'anms.menu.section' },
     // { link: 'class', label: 'anms.menu.class' },
     { link: 'student', label: 'anms.menu.student' },
-    { link: 'schedule', label: 'anms.menu.schedule' },
-    // { link: 'about', label: 'anms.menu.about' }
+
+    { link: 'schedule', label: 'anms.menu.schedule' }
+    //{ link: 'about', label: 'anms.menu.about' }
+
   ];
 
   navigation_setup = [
@@ -65,14 +67,15 @@ export class AppComponent implements OnInit, OnDestroy {
 
     { link: 'course', label: 'anms.menu.course' },
     { link: 'section', label: 'anms.menu.section' },
-    { link: 'class', label: 'anms.menu.class' }
+    { link: 'class', label: 'anms.menu.class' },
 
-    // { link: 'about', label: 'anms.menu.about' },
+    { link: 'roomedit', label: 'anms.menu.roomedit' }
   ];
 
-  navigation_about =[
-    { link: 'about', label: 'anms.menu.about' }
-  ];
+
+  navigation_about = [{ link: 'about', label: 'anms.menu.about' }];
+
+
   navigationSideMenu = [
     ...this.navigation,
     { link: 'settings', label: 'anms.menu.settings' }

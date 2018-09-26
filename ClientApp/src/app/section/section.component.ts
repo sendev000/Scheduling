@@ -36,13 +36,20 @@ export class SectionComponent implements OnInit {
   roomNameArray: any = [];
   roomNumberArray: any = [];
   teacherArray: any = [];
+  head: any = [];
+  head1: any = [];
 
   totalAnalysis: number;
 
+  sectionObj = [];
+
+  maxColumn: number;
+  gridCSS: string;
+
   selectGrad: number;
-  selectDepartment: number;
-  selectSubject: number;
-  selectCourse: number;
+  selectDepartment: string;
+  selectSubject: string;
+  selectCourse: string;
 
   ngOnInit() {
     this.init();
@@ -55,9 +62,9 @@ export class SectionComponent implements OnInit {
 
   init() {
     this.selectGrad = -1;
-    this.selectDepartment = -1;
-    this.selectSubject = -1;
-    this.selectCourse = -1;
+    this.selectDepartment = '';
+    this.selectSubject = '';
+    this.selectCourse = '';
   }
 
   initFromGlobalData() {
@@ -78,6 +85,9 @@ export class SectionComponent implements OnInit {
     this.roomNumberArray = [];
     this.teacherArray = [];
     this.totalAnalysis = 0;
+
+    this.head = [];
+    this.head1 = [];
 
     if (scheduleData && scheduleData.length > 0) {
       for (let i = 0; i < scheduleData.length; i++) {
@@ -117,6 +127,10 @@ export class SectionComponent implements OnInit {
         if (this.teacherArray.indexOf(eObj['teacher_name']) === -1) {
           this.teacherArray.push(eObj['teacher_name']);
         }
+
+        if (this.periodArray.indexOf(eObj['period']) === -1) {
+          this.periodArray.push(eObj['period']);
+        }
       }
 
       this.semesterArray.sort();
@@ -143,8 +157,10 @@ export class SectionComponent implements OnInit {
   updateContent() {
     let scheduleData = AppSettings.getScheduleData();
     let tempData = {},
-      middleData = [],
-      maxLength = 0;
+      count;
+    let periodHash = {},
+      semesterHash = {},
+      hashPeriodSemester = {};
 
     for (let i = 0; i < scheduleData.length; i++) {
       let eObj = scheduleData[i];
@@ -154,10 +170,69 @@ export class SectionComponent implements OnInit {
         check = false;
 
       if (
-        this.selectCourse != -1 &&
-        this.selectCourse != eObj['course_section']
+        this.selectCourse.length != 0 &&
+        this.selectCourse != eObj['course_section'].split('-', 1)
       )
         check = false;
+
+      if (check) {
+        let key =
+          eObj['course_section'] +
+          '|||' +
+          eObj['term'] +
+          '|||' +
+          eObj['course_grade'] +
+          '|||' +
+          eObj['semester'].toString() +
+          '|||' +
+          eObj['period'].toString();
+
+        if (!tempData[key]) tempData[key] = [];
+        else
+          tempData[key].push({
+            course_section: eObj['course_section'],
+            student_number: eObj['student_number'],
+            teacher_name: eObj['teacher_name'],
+            room_number: eObj['room_number']
+          });
+      }
     }
+
+    this.sectionObj[0] = [];
+
+    for (let i = 0; i < this.semesterArray.length; i++) {
+      for (let j = 0; j < this.periodArray.length; j++) {
+        let key = 'S' + (i + 1).toString() + 'P' + (j + 1).toString();
+        this.head.push(key);
+        this.head1.push('1234567890');
+        this.sectionObj[0].push(key);
+        hashPeriodSemester[key] = i * this.periodArray.length + j;
+      }
+    }
+
+    this.totalAnalysis = this.head.length;
+
+    for (let i = 0; i < this.semesterArray.length; i++) {
+      semesterHash[this.semesterArray[i]] = i;
+    }
+
+    for (let i = 0; i < this.periodArray.length; i++) {
+      periodHash[this.periodArray[i]] = i;
+    }
+
+    this.maxColumn = this.semesterArray.length * this.periodArray.length + 1;
+
+    for (let each in tempData) {
+      let split = each.split('|||');
+      let obj = tempData[each];
+      let indS = semesterHash[split[3]] + 1;
+      let indP = periodHash[split[4]] + 1;
+      let indSPKey = 'S' + indS.toString() + 'P' + indP.toString();
+      let indSP = hashPeriodSemester[indSPKey];
+    }
+
+    let min = Math.floor(100 / this.maxColumn);
+    let max = Math.ceil(100 / this.maxColumn);
+    this.gridCSS = 'repeat(auto-fit, minmax(' + min + '%,' + max + '%))';
   }
 }

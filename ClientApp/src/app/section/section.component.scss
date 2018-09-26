@@ -8,3 +8,29 @@
   justify-content: space-between;
   flex-direction: row-reverse;
 }
+
+.section-data-container {
+  > div {
+    display: grid;
+    grid-gap: 0px;
+  }
+}
+
+.section-data {
+  border: 1px solid #ccc;
+  box-shadow: 1px 2px 3px #ccc;
+  padding: 10px;
+  ul {
+    margin-bottom: 0px;
+    li p {
+      margin-bottom: 0px;
+    }
+  }
+}
+
+@media only screen and (min-width: 1200px) {
+  .container {
+    max-width: 100%;
+    padding: 0 30px;
+  }
+}
