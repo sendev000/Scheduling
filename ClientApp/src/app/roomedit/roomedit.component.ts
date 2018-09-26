@@ -4,24 +4,19 @@ import {SelectionModel} from '@angular/cdk/collections';
 import {MatPaginator,MatTableDataSource} from '@angular/material';
 import { SelectableSettings } from '@progress/kendo-angular-grid';
 
+import { AppSettings } from '../global/global';
+
 export interface PeriodicElement {
+  no: string,
   name: string;
-  position: number;
-  weight: number;
-  symbol: string;
+  area: string;
+  capacity: number;
+  department: string;
+  comment: string;
 }
 
 const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
+  
 ];
 
 @Component({
@@ -30,10 +25,9 @@ const ELEMENT_DATA: PeriodicElement[] = [
   styleUrls: ['./roomedit.component.css']
 })
 export class RoomeditComponent implements OnInit {
-  displayedColumns: string[] = ['select', 'position', 'name', 'weight', 'symbol'];
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+  displayedColumns: string[] = ['select', 'no', 'name', 'area', 'capacity', 'department', 'comment'];
+  dataSource: any;
   selection = new SelectionModel<PeriodicElement>(true, []);
-
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   /** Whether the number of selected elements matches the total number of rows. */
@@ -50,14 +44,44 @@ export class RoomeditComponent implements OnInit {
         this.dataSource.data.forEach(row => this.selection.select(row));
   }
 
-	
-
   ngOnInit() {
-    this.dataSource.paginator = this.paginator;
+    this.init();
   }
 
   openLink(link: string) {
     window.open(link, '_blank');
   }
 
+  init() {
+    let data: any = [];
+    let scheduleData = AppSettings.getScheduleData();
+
+    if (scheduleData && scheduleData.length > 0) {
+      for (let i = 0; i < scheduleData.length; i++) {
+        let eObj = scheduleData[i];
+        let name = " " + eObj['room_name'].toString();
+        if (data[ name ] == undefined)
+          data[ name ] = 1;
+        else
+          data[ name ] ++;
+      }
+    }
+    
+    data.sort();
+    console.log(data);
+    ELEMENT_DATA = [];
+    for (let each in data){
+      let tobj = {
+          no: each, 
+          name: each,
+          area: "Area",
+          capacity: data[each],
+          department: 'Department',
+          comment: 'Comment'
+        };
+      ELEMENT_DATA.push(tobj);
+    }
+    this.dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+    this.dataSource.paginator = this.paginator;
+  }
 }
