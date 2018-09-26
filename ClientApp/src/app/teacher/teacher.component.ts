@@ -252,15 +252,18 @@ export class TeacherComponent implements OnInit {
               .forEach(function(key) {
                 ordered[key] = cs[key];
               });
+
+            let numSection=0;
             for (let each in ordered) {
               firstLine += each + ' ' + ordered[each].toString() + '<br/>';
+              numSection++;
             }
 
             if(this.sh_cou==true){
               if(this.sp_color==true)
-                obj[j] = [firstLine + arr[0]['room_name']+ '<br/>' + thirdLine, this.getColor(arr.length), arr.length];
+                obj[j] = [firstLine + arr[0]['room_name']+ '<br/>' + thirdLine+" "+numSection.toString()+"/"+arr.length.toString(), this.getColor(arr.length), arr.length];
               else
-                obj[j] = [firstLine + arr[0]['room_name']+ '<br/>' + thirdLine, "#FFFFFF", arr.length];  
+                obj[j] = [firstLine + arr[0]['room_name']+ '<br/>' + thirdLine+" "+numSection.toString()+"/"+arr.length.toString(), "#FFFFFF", arr.length];  
             }
             else {
               if(this.sp_color==true)
@@ -280,12 +283,12 @@ export class TeacherComponent implements OnInit {
                 obj[j] = [ arr[0]['course_section'] + ' ' +
                 sn.length.toString() +
                 '<br/>' +
-                arr[0]['room_name']+ '<br/>' + thirdLine, this.getColor(sn.length), arr.length];
+                arr[0]['room_name']+ '<br/>' + thirdLine+" 1/"+arr.length.toString(), this.getColor(sn.length), arr.length];
               else
                 obj[j] = [ arr[0]['course_section'] + ' ' +
                 sn.length.toString() +
                 '<br/>' +
-                arr[0]['room_name']+ '<br/>' + thirdLine, "#FFFFFF", arr.length];  
+                arr[0]['room_name']+ '<br/>' + thirdLine+" 1/"+arr.length.toString(), this.getColor(sn.length), "#FFFFFF", arr.length];  
             }
             else {
               if(this.sp_color==true)
