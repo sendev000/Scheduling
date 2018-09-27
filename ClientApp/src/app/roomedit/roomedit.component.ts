@@ -15,9 +15,6 @@ export interface PeriodicElement {
   comment: string;
 }
 
-const ELEMENT_DATA: PeriodicElement[] = [
-  
-];
 
 @Component({
   selector: 'anms-roomedit',
@@ -29,6 +26,9 @@ export class RoomeditComponent implements OnInit {
   dataSource: any;
   selection = new SelectionModel<PeriodicElement>(true, []);
   @ViewChild(MatPaginator) paginator: MatPaginator;
+
+  ELEMENT_DATA: PeriodicElement[] = [];
+
 
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
@@ -69,7 +69,7 @@ export class RoomeditComponent implements OnInit {
     
     data.sort();
     console.log(data);
-    ELEMENT_DATA = [];
+    this.ELEMENT_DATA = [];
     for (let each in data){
       let tobj = {
           no: each, 
@@ -79,9 +79,9 @@ export class RoomeditComponent implements OnInit {
           department: 'Department',
           comment: 'Comment'
         };
-      ELEMENT_DATA.push(tobj);
+      this.ELEMENT_DATA.push(tobj);
     }
-    this.dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+    this.dataSource = new MatTableDataSource<PeriodicElement>(this.ELEMENT_DATA);
     this.dataSource.paginator = this.paginator;
   }
 }

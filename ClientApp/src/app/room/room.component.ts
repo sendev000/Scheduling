@@ -239,6 +239,8 @@ export class RoomComponent implements OnInit {
 
 
           thirdLine=arr[0]['course_section'].substring(0, 5);
+
+
           if (
             arr[0]['course_section'].indexOf('GLC') > -1 ||
             arr[0]['course_section'].indexOf('CHV') > -1
@@ -255,15 +257,18 @@ export class RoomComponent implements OnInit {
               .forEach(function(key) {
                 ordered[key] = cs[key];
               });
+
+            let numSection=0;
             for (let each in ordered) {
               firstLine += each + ' ' + ordered[each].toString() + '<br/>';
+              numSection++;
             }
 
             if(this.sh_cou==true){
               if (this.sp_color==true)
-              obj[j] = [firstLine + secondLine+'<br/>' + thirdLine, this.getColor(arr.length), arr.length];
-            else
-              obj[j] = [firstLine + secondLine +'<br/>'+ thirdLine, "#FFFFFF", arr.length];  
+                obj[j] = [firstLine + secondLine+'<br/>' + thirdLine+" "+numSection.toString()+"/"+arr.length.toString(), this.getColor(arr.length), arr.length];
+              else
+                obj[j] = [firstLine + secondLine +'<br/>'+ thirdLine+" "+numSection.toString()+"/"+arr.length.toString(), "#FFFFFF", arr.length];  
             }
             else {
               if (this.sp_color==true)
@@ -282,14 +287,14 @@ export class RoomComponent implements OnInit {
 
             if(this.sh_cou==true){
               if (this.sp_color==true)
-              obj[j] = [firstLine + '<br/>' + secondLine+ '<br/>' + thirdLine, this.getColor(sn.length), arr.length];
-            else
-              obj[j] = [firstLine + '<br/>' + secondLine+ '<br/>' + thirdLine, "#FFFFFF", arr.length];  
+                obj[j] = [firstLine + '<br/>' + secondLine+ '<br/>' + thirdLine+" 1/"+arr.length.toString(), this.getColor(sn.length), arr.length];
+              else
+                obj[j] = [firstLine + '<br/>' + secondLine+ '<br/>' + thirdLine+" 1/"+arr.length.toString(), "#FFFFFF", arr.length];  
             }else{
               if (this.sp_color==true)
-              obj[j] = [firstLine + '<br/>' + secondLine, this.getColor(sn.length), arr.length];
-            else
-              obj[j] = [firstLine + '<br/>' + secondLine, "#FFFFFF", arr.length];
+                obj[j] = [firstLine + '<br/>' + secondLine, this.getColor(sn.length), arr.length];
+              else
+                obj[j] = [firstLine + '<br/>' + secondLine, "#FFFFFF", arr.length];
             }
 
             
