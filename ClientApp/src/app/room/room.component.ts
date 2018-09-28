@@ -50,6 +50,10 @@ export class RoomComponent implements OnInit {
   selectSemester: number;
   selectRoom: number;
 
+  page: number;
+  studentDetail: any;
+  objectKey: any;
+
   ngOnInit() {
     this.init();
     this.initFromGlobalData();
@@ -66,6 +70,9 @@ export class RoomComponent implements OnInit {
     this.chk=true;
     this.sp_color=true;
     this.sh_cou=false;
+
+    this.page = 0;
+    this.objectKey = Object.keys;
   }
   initFromGlobalData() {
     let scheduleData = AppSettings.getScheduleData();
@@ -87,6 +94,7 @@ export class RoomComponent implements OnInit {
     this.roomObj = [];
     this.maxColumn = 0;
     this.totalAnalysis = 0;
+    this.studentDetail = {};
 
     if (scheduleData && scheduleData.length > 0) {
       for (let i = 0; i < scheduleData.length; i++) {
@@ -178,12 +186,11 @@ export class RoomComponent implements OnInit {
           '|||' +
           eObj['period'].toString();
         if (!tempData[key]) tempData[key] = [];
-        else
-          tempData[key].push({
-            course_section: eObj['course_section'],
-            student_number: eObj['student_number'],
-            teacher_name: eObj['teacher_name']
-          });
+        tempData[key].push({
+          course_section: eObj['course_section'],
+          student_number: eObj['student_number'],
+          teacher_name: eObj['teacher_name']
+        });
       }
     }
     this.roomObj[0] = [];
@@ -304,6 +311,7 @@ export class RoomComponent implements OnInit {
           obj[j] = ["", this.getColor(0), 0];
           emptyCount++;
         }
+        obj[j].push(arr);
       }
       if (emptyCount == this.maxColumn - 1) {
         this.roomObj.splice(i, 1);
@@ -334,7 +342,7 @@ export class RoomComponent implements OnInit {
         if (j > 0){
 
 
-          key1 = key + " Seciton";
+          key1 = key + " Section";
           if (this.roomObj[i][j][2] === 0)
             obj[key1] = "";
           else
@@ -388,6 +396,35 @@ export class RoomComponent implements OnInit {
     if (this.totalAnalysis==0) return;
     this.sh_cou=!this.sh_cou;
     this.updateContent();
+  }
+  pageTransit(p) {
+    this.page = p;
+  }
+  showDetail(i,j) {
+    if (i != 0 && j != 0)
+    {
+      let cc = 0;
+      this.studentDetail = {};
+      this.studentDetail["Room"] = this.roomObj[i][0][0];
+      this.studentDetail["SP"] = this.roomObj[0][j][0];
+      this.studentDetail["Student"] = {};
+      for(let each in this.roomObj[i][j][3]) {
+        let obj = this.roomObj[i][j][3][each];
+        if (this.studentDetail["Student"][ obj['course_section'] ] == undefined)
+          this.studentDetail["Student"][ obj['course_section'] ] = [];
+        this.studentDetail["Student"][ obj['course_section'] ].push([obj['student_number'], obj['teacher_name']]);
+      }
+      for (let each in this.studentDetail["Student"]) {
+        cc ++;
+        this.studentDetail[each] = this.studentDetail["Student"][each].length;
+      }
+      this.studentDetail["CourseCount"] = cc;
+      this.page = 1;
+    }
+    else
+    {
+      console.log("No Data");
+    }
   }
 }
 

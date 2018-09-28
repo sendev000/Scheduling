@@ -171,12 +171,11 @@ export class TeacherComponent implements OnInit {
           '|||' +
           eObj['period'].toString();
         if (!tempData[key]) tempData[key] = [];
-        else
-          tempData[key].push({
-            course_section: eObj['course_section'],
-            student_number: eObj['student_number'],
-            room_name: eObj['room_name']
-          });
+        tempData[key].push({
+          course_section: eObj['course_section'],
+          student_number: eObj['student_number'],
+          room_name: eObj['room_name']
+        });
       }
     }
     this.teacherObj[0] = [];

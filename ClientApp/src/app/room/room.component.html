@@ -62,18 +62,42 @@
       </div>
     </div>
     <div class="col-md-9">
-      <h3>Total Counts: {{totalAnalysis}}</h3>
-      <div class="room-data-container">
-        <ng-container *ngFor="let ro of roomObj;let i=index">
-          <div [ngStyle] = "{'grid-template-columns': gridCSS}">
-            <ng-container *ngFor="let each of ro;let j=index">
-              <div class="room-data" [ngStyle]="{'background': each[1]}">
-                <div [innerHTML]="each[0]"></div>
-              </div>
-            </ng-container>
-          </div>
-        </ng-container>
-      </div>
+      <ng-container *ngIf="page===0">
+        <h3>Total Counts: {{totalAnalysis}}</h3>
+        <div class="room-data-container">
+          <ng-container *ngFor="let ro of roomObj;let i=index">
+            <div [ngStyle] = "{'grid-template-columns': gridCSS}">
+              <ng-container *ngFor="let each of ro;let j=index">
+                <div class="room-data" [ngStyle]="{'background': each[1]}">
+                  <div [innerHTML]="each[0]" (click)="showDetail(i,j)"></div>
+                </div>
+              </ng-container>
+            </div>
+          </ng-container>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="page===1">
+        <div class="col-md-12">
+          <button mat-raised-button (click)="pageTransit(0)">Back to First Page</button>
+        </div>
+        <div class="col-md-12 main-content">
+          <h3>Room: {{studentDetail['Room'] }}</h3>
+          <h3>Semester-Period: {{studentDetail['SP'] }}</h3>
+          <h3>Course counts: {{studentDetail['CourseCount'] }}</h3>
+          <ng-container *ngFor="let each of objectKey(studentDetail['Student'])">
+            <div class="course-sector">
+              <h4>Course Sector: {{each}}</h4>
+              <h4>Teacher Name: {{studentDetail['Student'][each][0][1]}}</h4>
+              <h4>Number of Students: {{studentDetail[each]}}</h4>
+              <h4>Student IDs: 
+                <ng-container *ngFor="let each1 of studentDetail['Student'][each]">
+                  {{each1[0]}}
+                </ng-container>
+              </h4>
+            </div>
+          </ng-container>
+        </div>
+      </ng-container>
     </div>
   </div>
 </div>
