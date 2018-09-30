@@ -8,15 +8,17 @@ import {
 import { MatPaginator, MatTableDataSource } from '@angular/material';
 import { Angular5Csv } from 'angular5-csv/Angular5-csv';
 import { environment as env } from '@env/environment';
-import { ROUTE_ANIMATIONS_ELEMENTS } from '@app/core';
+import { ROUTE_ANIMATIONS_ELEMENTS, routeAnimations } from '@app/core';
 
 import { AppSettings } from '../global/global';
 import { ExcelService } from '../global/excelService';
+import { ActivationEnd, Router } from '@angular/router';
 
 @Component({
   selector: 'anms-room',
   templateUrl: './room.component.html',
-  styleUrls: ['./room.component.scss']
+  styleUrls: ['./room.component.scss'],
+  animations: [routeAnimations]
 })
 export class RoomComponent implements OnInit {
   routeAnimationsElements = ROUTE_ANIMATIONS_ELEMENTS;
