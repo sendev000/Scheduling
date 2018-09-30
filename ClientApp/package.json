@@ -2,6 +2,7 @@
   "name": "angular-ngrx-material-starter",
   "version": "6.9.0",
   "license": "MIT",
+  "engines": {"node": "8.11.1"},
   "scripts": {
     "ng": "ng",
     "start": "ng serve --open",
