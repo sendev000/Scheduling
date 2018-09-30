@@ -2,7 +2,6 @@ import { Component, OnInit , ViewChild} from '@angular/core';
 import {SelectionModel} from '@angular/cdk/collections';
 
 import {MatPaginator,MatTableDataSource} from '@angular/material';
-import { SelectableSettings } from '@progress/kendo-angular-grid';
 
 import { AppSettings } from '../global/global';
 
