@@ -68,7 +68,6 @@ export class StudentComponent implements OnInit {
     this.sp_color=true;
     this.sh_cou=false;
 
-    this.page = 0;
   }
   initFromGlobalData() {
     let scheduleData = AppSettings.getScheduleData();
