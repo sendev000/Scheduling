@@ -79,6 +79,10 @@
       <ng-container *ngIf="page===1">
         <div class="col-md-12">
           <button mat-raised-button (click)="pageTransit(0)">Back to First Page</button>
+          &nbsp;&nbsp;
+          
+          <a mat-raised-button href="http://localhost:4200/#/student">Student Page</a>
+
         </div>
         <div class="col-md-12 main-content">
           <h3>Room: {{studentDetail['Room'] }}</h3>

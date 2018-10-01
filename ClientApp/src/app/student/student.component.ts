@@ -67,7 +67,6 @@ export class StudentComponent implements OnInit {
     this.chk=true;
     this.sp_color=true;
     this.sh_cou=false;
-
   }
   initFromGlobalData() {
     let scheduleData = AppSettings.getScheduleData();
@@ -255,14 +254,14 @@ export class StudentComponent implements OnInit {
             .forEach(function(key) {
               ordered[key] = cs[key];
             });
-          firstLine = numberOfCS + "<br/>";
+          firstLine =  "";
           for (let each in ordered) {
             let names = ordered[each][0][0].split(" "), name;
             if (names.length > 1)
               name = names[0] + ' ' + names[1].substring(0, 1).toUpperCase() + '.';
             else
               name = ordered[each][0][0];
-            firstLine += "[" + each + ", " + name + ", " + ordered[each][0][1] + "]<br/>";
+            firstLine +=  each + ", " + ordered[each][0][1] + "<br/>"+ name+"<br/>";
           }
 
           if (this.sp_color==true)
@@ -303,15 +302,21 @@ export class StudentComponent implements OnInit {
         if (j==0){
           obj[key] = this.studentObj[i][j][0];
         }
-        if (j > 0){
+        if (j > 0){          
 
-          key1 = key + " Number of Section";
-          if (this.studentObj[i][j][2] === 0)
-            obj[key1] = "";
-          else
-            obj[key1] = rr[0];
-
-          key1 = key + " Detail";
+          if(this.studentObj[i][j][2]===0){
+            key1=key+" Section";
+            obj[key1]="";
+            key1=key+" Room";
+            obj[key1]="";
+          } else{
+            let st=rr[0].split(',');
+            key1=key+" Section";
+            obj[key1]=st[0];
+            key1=key+" Room";
+            obj[key1]=st[1];
+          }
+          key1 = key + " Teacher";
           if (this.studentObj[i][j][2] === 0)
             obj[key1] = "";
           else
@@ -326,11 +331,11 @@ export class StudentComponent implements OnInit {
         'Student - Semester/Period Analysis',
         false
       );
-      ExcelService.exportAsExcelFile(
-        this.specialStudent,
-        "Special Students List",
-        false
-      );
+      // ExcelService.exportAsExcelFile(
+      //   this.specialStudent,
+      //   'Special Students List',
+      //   false
+      // );
     }
   }
   getColor(num) {
@@ -362,7 +367,7 @@ export class StudentComponent implements OnInit {
   }
 
 
-
+}
 
 
   // numberOfStudent: number;
@@ -526,7 +531,7 @@ export class StudentComponent implements OnInit {
   //     return (a['student_id'] < b['student_id']) ? -1 : 1;
   //   }
   // }
-}
+
 
 
 // export interface StudentElement {
