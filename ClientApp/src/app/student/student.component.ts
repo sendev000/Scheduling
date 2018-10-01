@@ -331,11 +331,11 @@ export class StudentComponent implements OnInit {
         'Student - Semester/Period Analysis',
         false
       );
-      // ExcelService.exportAsExcelFile(
-      //   this.specialStudent,
-      //   'Special Students List',
-      //   false
-      // );
+      ExcelService.exportAsExcelFile(
+        this.specialStudent,
+        'Special Students List',
+        false
+      );
     }
   }
   getColor(num) {

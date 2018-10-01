@@ -337,7 +337,8 @@ export class RoomComponent implements OnInit {
         key = this.roomObj[0][j][0];
         let rr = this.roomObj[i][j][0].split(search).join(replacement);
 
-        let sp=rr.split(' ');
+        let sp=rr.split(' '), sp_len;
+        sp_len = sp.length;
         if (j==0){
           obj[key]=rr;
         }
@@ -360,7 +361,7 @@ export class RoomComponent implements OnInit {
           if (this.roomObj[i][j][2] === 0)
             obj[key1] = "";
           else
-            obj[key1] = sp[2]+" "+sp[3];
+            obj[key1] = sp[sp_len-2]+" "+sp[sp_len-1];
         }
       }
       data.push(obj);
