@@ -5,6 +5,7 @@ import {
   NgForm,
   Validators
 } from '@angular/forms';
+import {ActivatedRoute} from "@angular/router";
 import { MatPaginator, MatTableDataSource } from '@angular/material';
 import { Angular5Csv } from 'angular5-csv/Angular5-csv';
 import { environment as env } from '@env/environment';
@@ -50,6 +51,9 @@ export class StudentComponent implements OnInit {
   selectTeacher: number;
   selectSemester: number;
   selectStudent: number;
+
+  constructor(private route: ActivatedRoute) {
+  }
 
   ngOnInit() {
     this.init();
@@ -153,6 +157,8 @@ export class StudentComponent implements OnInit {
     this.updateContent();
   }
   updateContent() {
+    let param = this.route.snapshot.queryParams["section"];
+    let hasSection = false, sections;
     let scheduleData = AppSettings.getScheduleData();
     let tempData = {},
       count;
@@ -160,6 +166,11 @@ export class StudentComponent implements OnInit {
       periodHash = {},
       semesterHash = {},
       hashPeriodSemester = {};
+    if (param != undefined){
+      sections = param.split(",");
+      hasSection = true;
+    }
+
     for (let i = 0; i < scheduleData.length; i++) {
       let eObj = scheduleData[i];
       let check = true;
@@ -172,6 +183,11 @@ export class StudentComponent implements OnInit {
         check = false;
       if (this.selectStudent != -1 && this.selectStudent != eObj['student_number'])
         check = false;
+      if (hasSection)
+      {
+        if (sections.indexOf(eObj['course_section']) == -1)
+          check = false;
+      }
       if (check) {
         let key =
           eObj['student_number'] +

@@ -63,11 +63,11 @@
     <div class="col-md-9">
       <h3>Total Counts: {{totalAnalysis}}</h3>
       <div class="teacher-data-container">
-        <ng-container *ngFor="let ro of teacherObj">
+        <ng-container *ngFor="let ro of teacherObj;let i=index">
           <div [ngStyle] = "{'grid-template-columns': gridCSS}">
-            <ng-container *ngFor="let each of ro">
+            <ng-container *ngFor="let each of ro;let j=index">
               <div class="teacher-data" [ngStyle]="{'background': each[1]}">
-                <div [innerHTML]="each[0]"></div>
+                <div [innerHTML]="each[0]" (click)="showDetail(i,j)"></div>
               </div>
             </ng-container>
           </div>

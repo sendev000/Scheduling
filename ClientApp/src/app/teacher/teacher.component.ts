@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Angular5Csv } from 'angular5-csv/Angular5-csv';
 import { environment as env } from '@env/environment';
 import { ROUTE_ANIMATIONS_ELEMENTS } from '@app/core';
+import { Router } from '@angular/router';
 
 import { AppSettings } from '../global/global';
 import { ExcelService } from '../global/excelService';
@@ -42,6 +43,8 @@ export class TeacherComponent implements OnInit {
   selectTeacher: number;
   selectSemester: number;
   selectRoom: number;
+
+  constructor(private router: Router) { }
 
   ngOnInit() {
     this.init();
@@ -403,6 +406,21 @@ export class TeacherComponent implements OnInit {
     if (this.totalAnalysis==0) return;
     this.sh_cou=!this.sh_cou;
     this.updateContent();
+  }
+
+  showDetail(i,j) {
+    if (i != 0 && j != 0)
+    {
+      let param = "";
+      let val = this.teacherObj[i][j][0].split("<br/>");
+      for (let i=0;i<val.length-1;i++) {
+        let eachLine = val[i].split(" ");
+        param += eachLine[0] + ",";
+      }
+      param = param.substring(0, param.length-1);
+
+      this.router.navigateByUrl('/student?section=' + param);
+    }
   }
 }
 

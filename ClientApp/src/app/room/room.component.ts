@@ -5,6 +5,7 @@ import {
   NgForm,
   Validators
 } from '@angular/forms';
+import { Router } from '@angular/router';
 import { MatPaginator, MatTableDataSource } from '@angular/material';
 import { Angular5Csv } from 'angular5-csv/Angular5-csv';
 import { environment as env } from '@env/environment';
@@ -12,7 +13,7 @@ import { ROUTE_ANIMATIONS_ELEMENTS, routeAnimations } from '@app/core';
 
 import { AppSettings } from '../global/global';
 import { ExcelService } from '../global/excelService';
-import { ActivationEnd, Router } from '@angular/router';
+
 
 @Component({
   selector: 'anms-room',
@@ -55,6 +56,8 @@ export class RoomComponent implements OnInit {
   page: number;
   studentDetail: any;
   objectKey: any;
+
+  constructor(private router: Router) { }
 
   ngOnInit() {
     this.init();
@@ -344,7 +347,6 @@ export class RoomComponent implements OnInit {
         }
         if (j > 0){
 
-
           key1 = key + " Section";
           if (this.roomObj[i][j][2] === 0)
             obj[key1] = "";
@@ -406,23 +408,32 @@ export class RoomComponent implements OnInit {
   showDetail(i,j) {
     if (i != 0 && j != 0)
     {
-      let cc = 0;
-      this.studentDetail = {};
-      this.studentDetail["Room"] = this.roomObj[i][0][0];
-      this.studentDetail["SP"] = this.roomObj[0][j][0];
-      this.studentDetail["Student"] = {};
-      for(let each in this.roomObj[i][j][3]) {
-        let obj = this.roomObj[i][j][3][each];
-        if (this.studentDetail["Student"][ obj['course_section'] ] == undefined)
-          this.studentDetail["Student"][ obj['course_section'] ] = [];
-        this.studentDetail["Student"][ obj['course_section'] ].push([obj['student_number'], obj['teacher_name']]);
+      let param = "";
+      let val = this.roomObj[i][j][0].split("<br/>");
+      for (let i=0;i<val.length-1;i++) {
+        let eachLine = val[i].split(" ");
+        param += eachLine[0] + ",";
       }
-      for (let each in this.studentDetail["Student"]) {
-        cc ++;
-        this.studentDetail[each] = this.studentDetail["Student"][each].length;
-      }
-      this.studentDetail["CourseCount"] = cc;
-      this.page = 1;
+      param = param.substring(0, param.length-1);
+
+      this.router.navigateByUrl('/student?section=' + param);
+      // let cc = 0;
+      // this.studentDetail = {};
+      // this.studentDetail["Room"] = this.roomObj[i][0][0];
+      // this.studentDetail["SP"] = this.roomObj[0][j][0];
+      // this.studentDetail["Student"] = {};
+      // for(let each in this.roomObj[i][j][3]) {
+      //   let obj = this.roomObj[i][j][3][each];
+      //   if (this.studentDetail["Student"][ obj['course_section'] ] == undefined)
+      //     this.studentDetail["Student"][ obj['course_section'] ] = [];
+      //   this.studentDetail["Student"][ obj['course_section'] ].push([obj['student_number'], obj['teacher_name']]);
+      // }
+      // for (let each in this.studentDetail["Student"]) {
+      //   cc ++;
+      //   this.studentDetail[each] = this.studentDetail["Student"][each].length;
+      // }
+      // this.studentDetail["CourseCount"] = cc;
+      // this.page = 1;
     }
     else
     {
